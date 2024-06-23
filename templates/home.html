@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalambury</title>
+    <style>
+        body {
+            background-color: white;
+            font-family: Arial, sans-serif;
+            color: navy;
+        }
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        .button {
+            background-color: lightblue;
+            border: 2px solid blue;
+            border-radius: 5px;
+            padding: 10px 20px;
+            margin: 10px;
+            text-decoration: none;
+            color: navy;
+        }
+        .button:hover {
+            background-color: lightcyan;
+        }
+        .button:active {
+            color: white;
+            background-color: navy;
+            border-color: navy;
+        }
+        video, img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="center">
+        <h1></h1>
+        <a href="#" class="button" id="start-button">Start</a>
+        <a href="#" class="button" id="exit-button">Exit</a>
+        <div id="word-display" style="margin-top: 20px; font-size: 20px;"></div>
+    </div>
+    <div class="center">
+        <img id="live-camera-feed" src="/live-camera-feed/" alt="Live Camera Feed">
+    </div>
+
+    <script>
+        document.getElementById('start-button').addEventListener('click', () => {
+            document.getElementById('live-camera-feed').style.display = 'block';
+        });
+    </script>
+</body>
+</html>
