@@ -1,6 +1,4 @@
-
 import random
-import os
 import numpy as np
 import cv2
 import mediapipe as mp
@@ -8,6 +6,7 @@ from django.shortcuts import render
 from django.http import JsonResponse, StreamingHttpResponse
 from django.views import View
 from .camera import VideoCamera
+
 
 dataset = {
     "Zwierzęta": ["Pies", "Kot", "Słoń", "Lew", "Tygrys", "Małpa", "Krowa", "Kura", "Zebra", "Kangur"],
@@ -20,19 +19,38 @@ dataset = {
 
 mp_hands = mp.solutions.hands.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5)
 
+
 class HomeView(View):
     def get(self, request):
         return render(request, 'home.html')
 
+
 class StartGameView(View):
     def get(self, request):
-        category, word = self.select_random_category_and_word()
+        difficulty = request.GET.get('difficulty', 'easy')
+        category, word = self.select_random_category_and_word(difficulty)
         return JsonResponse({'category': category, 'word': word})
 
-    def select_random_category_and_word(self):
-        category = random.choice(list(dataset.keys()))
-        word = random.choice(dataset[category])
+    def select_random_category_and_word(self, difficulty):
+        filtered_dataset = self.filter_by_difficulty(difficulty)
+        category = random.choice(list(filtered_dataset.keys()))
+        word = random.choice(filtered_dataset[category])
         return category, word
+
+    def filter_by_difficulty(self, difficulty):
+        if difficulty == 'easy':
+            max_length = 5
+        elif difficulty == 'medium':
+            max_length = 8
+        else:
+            max_length = 12
+
+        filtered_dataset = {
+            category: [word for word in words if len(word) <= max_length]
+            for category, words in dataset.items()
+        }
+        return {k: v for k, v in filtered_dataset.items() if v}
+
 
 class ProcessVideoFrameView(View):
     def post(self, request):
@@ -59,10 +77,12 @@ class ProcessVideoFrameView(View):
                 landmarks.append([[landmark.x, landmark.y, landmark.z] for landmark in hand_landmarks.landmark])
         return frame, landmarks
 
+
 class LiveCameraFeedView(View):
     def get(self, request):
         try:
-            return StreamingHttpResponse(self.generate_frames(VideoCamera()), content_type="multipart/x-mixed-replace; boundary=frame")
+            return StreamingHttpResponse(self.generate_frames(VideoCamera()),
+                                         content_type="multipart/x-mixed-replace; boundary=frame")
         except Exception as e:
             print(e)
             return JsonResponse({'error': 'Streaming error'}, status=500)
