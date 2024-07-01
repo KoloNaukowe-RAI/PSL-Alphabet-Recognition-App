@@ -7,11 +7,12 @@
     <title>Kalambury</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
-            background-color: #f8f9fa;
+            background-color: #1f1f1f;
             font-family: 'Roboto', sans-serif;
-            color: #343a40;
+            color: #ffffff;
         }
 
         .center {
@@ -23,7 +24,7 @@
         }
 
         .custom-button {
-            background-color: #007bff;
+            background: linear-gradient(45deg, #007bff, #00d4ff);
             border: none;
             border-radius: 5px;
             padding: 10px 20px;
@@ -35,13 +36,13 @@
         }
 
         .custom-button:hover {
-            background-color: #0056b3;
+            background: linear-gradient(45deg, #0056b3, #0096d6);
             transform: translateY(-2px);
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         .custom-button:active {
-            background-color: #004085;
+            background: linear-gradient(45deg, #004085, #0077aa);
             box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
         }
 
@@ -63,8 +64,8 @@
         .modal-header,
         .modal-body,
         .modal-footer {
-            background-color: #e9ecef;
-            color: #343a40;
+            background-color: #343a40;
+            color: #ffffff;
         }
 
         .player-name-display {
@@ -75,11 +76,32 @@
 
         .navbar {
             background-color: #007bff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
         }
 
-        .navbar-brand,
-        .navbar-nav .nav-link {
+        .navbar-brand-container {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
             color: #ffffff;
+        }
+
+        .navbar-brand i {
+            margin-left: 10px;
+        }
+
+        .openbtn {
+            margin-right: auto;
         }
 
         .loading-screen {
@@ -117,15 +139,95 @@
             color: #ffc107;
         }
 
-        @media (max-width: 768px) {
-            .center {
-                padding: 20px;
-                height: auto;
-            }
+        .sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1001;
+            top: 0;
+            left: 0;
+            background-color: #343a40;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
 
-            .navbar {
-                padding: 10px;
-            }
+        .sidebar a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #ffffff;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            color: #00d4ff;
+            background-color: #1f1f1f;
+        }
+
+        .sidebar .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+
+        .openbtn {
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .openbtn:hover {
+            background-color: #0056b3;
+        }
+
+        .icon {
+            margin-right: 10px;
+        }
+
+        .carousel {
+            display: flex;
+            overflow: hidden;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .carousel-inner {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel-item {
+            min-width: 100%;
+            text-align: center;
+        }
+
+        .carousel-buttons {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .carousel-buttons .btn {
+            background-color: #007bff;
+            border: none;
+            color: white;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .carousel-buttons .btn:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -140,29 +242,41 @@
 
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg">
-        <a class="navbar-brand" href="#" id="navbar-brand">Kalambury</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <button class="btn custom-button" data-toggle="modal" data-target="#settingsModal"
-                        id="settings-button">Settings</button>
-                </li>
-            </ul>
+        <button class="openbtn" onclick="openNav()">&#9776; Menu</button>
+        <div class="navbar-brand-container">
+            <a class="navbar-brand" href="#" id="navbar-brand">Kalambury <i class="fas fa-american-sign-language-interpreting"></i></a>
         </div>
     </nav>
+
+    <!-- Side Navigation -->
+    <div id="mySidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="#" class="active"><i class="fas fa-home icon"></i>Home</a>
+        <a href="#" data-toggle="modal" data-target="#settingsModal"><i class="fas fa-cog icon"></i>Settings</a>
+        <a href="#"><i class="fas fa-chart-line icon"></i>Statistics</a>
+        <a href="#"><i class="fas fa-question-circle icon"></i>Help</a>
+    </div>
 
     <!-- Main Menu -->
     <div id="main-menu" class="container text-center center">
         <button class="btn custom-button" id="start-game-button">Start Game</button>
         <button class="btn custom-button" id="add-player-button">Add Player</button>
-        <div id="difficulty-selection" class="mt-3">
-            <button class="btn custom-button" id="easy-button">Easy</button>
-            <button class="btn custom-button" id="medium-button">Medium</button>
-            <button class="btn custom-button" id="hard-button">Hard</button>
+        <div id="difficulty-selection" class="mt-3 carousel">
+            <div class="carousel-inner" id="carousel-inner">
+                <div class="carousel-item active">
+                    <button class="btn custom-button" id="easy-button">Easy</button>
+                </div>
+                <div class="carousel-item">
+                    <button class="btn custom-button" id="medium-button">Medium</button>
+                </div>
+                <div class="carousel-item">
+                    <button class="btn custom-button" id="hard-button">Hard</button>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-buttons">
+            <button class="btn" id="prev">‹</button>
+            <button class="btn" id="next">›</button>
         </div>
     </div>
 
@@ -266,7 +380,7 @@
         });
 
         function updateLanguage() {
-            document.getElementById('navbar-brand').textContent = translations[language]['navbar-brand'];
+            document.getElementById('navbar-brand').innerHTML = translations[language]['navbar-brand'] + ' <i class="fas fa-american-sign-language-interpreting"></i>';
             document.getElementById('settings-button').textContent = translations[language]['settings-button'];
             document.getElementById('start-game-button').textContent = translations[language]['start-game-button'];
             document.getElementById('add-player-button').textContent = translations[language]['add-player-button'];
@@ -311,82 +425,113 @@
             startGame();
         });
 
-       document.getElementById('add-player-button').addEventListener('click', () => {
-    let newPlayerName = prompt("Enter player's name:");
-    if (newPlayerName) {
-        playerName = newPlayerName;
-        localStorage.setItem('playerName', playerName);
-        alert(`Player ${newPlayerName} added.`);
-    }
-});
-
-document.getElementById('back-button').addEventListener('click', () => {
-    document.getElementById('game-section').classList.add('hidden');
-    document.getElementById('main-menu').classList.remove('hidden');
-});
-
-document.getElementById('exit-button').addEventListener('click', () => {
-    if (confirm("Are you sure you want to exit?")) {
-        window.close();
-    }
-});
-
-document.getElementById('easy-button').addEventListener('click', () => {
-    difficulty = 'easy';
-    alert('Easy difficulty selected.');
-});
-
-document.getElementById('medium-button').addEventListener('click', () => {
-    difficulty = 'medium';
-    alert('Medium difficulty selected.');
-});
-
-document.getElementById('hard-button').addEventListener('click', () => {
-    difficulty = 'hard';
-    alert('Hard difficulty selected.');
-});
-
-function startGame() {
-    const duration = document.getElementById('duration').value;
-    fetch(`/start-game?language=${language}&difficulty=${difficulty}`)
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('word-display').textContent = `Category: ${data.category}, Word: ${data.word}`;
-            document.getElementById('live-camera-feed').style.display = 'block';
-            document.getElementById('live-camera-feed').src = "/live-camera-feed/";
-            document.getElementById('player-name-display').textContent = `Player: ${playerName}`;
-            startTimer(duration * 60); 
+        document.getElementById('add-player-button').addEventListener('click', () => {
+            let newPlayerName = prompt("Enter player's name:");
+            if (newPlayerName) {
+                playerName = newPlayerName;
+                localStorage.setItem('playerName', playerName);
+                alert(`Player ${newPlayerName} added.`);
+            }
         });
-}
 
-function startTimer(duration) {
-    let timer = duration;
-    const timerDisplay = document.getElementById('timer');
-    const interval = setInterval(() => {
-        const minutes = String(Math.floor(timer / 60)).padStart(2, '0');
-        const seconds = String(timer % 60).padStart(2, '0');
+        document.getElementById('back-button').addEventListener('click', () => {
+            document.getElementById('game-section').classList.add('hidden');
+            document.getElementById('main-menu').classList.remove('hidden');
+        });
 
-        timerDisplay.textContent = `${minutes}:${seconds}`;
+        document.getElementById('exit-button').addEventListener('click', () => {
+            if (confirm("Are you sure you want to exit?")) {
+                window.close();
+            }
+        });
 
-        if (timer <= 0) {
-            clearInterval(interval);
-            alert("Time's up!");
-        } else {
-            timer--;
+        document.getElementById('easy-button').addEventListener('click', () => {
+            difficulty = 'easy';
+            alert('Easy difficulty selected.');
+        });
+
+        document.getElementById('medium-button').addEventListener('click', () => {
+            difficulty = 'medium';
+            alert('Medium difficulty selected.');
+        });
+
+        document.getElementById('hard-button').addEventListener('click', () => {
+            difficulty = 'hard';
+            alert('Hard difficulty selected.');
+        });
+
+        function startGame() {
+            const duration = document.getElementById('duration').value;
+            fetch(`/start-game?language=${language}&difficulty=${difficulty}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('word-display').textContent = `Category: ${data.category}, Word: ${data.word}`;
+                    document.getElementById('live-camera-feed').style.display = 'block';
+                    document.getElementById('live-camera-feed').src = "/live-camera-feed/";
+                    document.getElementById('player-name-display').textContent = `Player: ${playerName}`;
+                    startTimer(duration * 60); 
+                });
         }
-    }, 1000);
-}
 
-document.querySelectorAll('.star').forEach(star => {
-    star.addEventListener('click', () => {
-        const rating = star.getAttribute('data-value');
-        document.querySelectorAll('.star').forEach(s => s.classList.remove('checked'));
-        for (let i = 0; i < rating; i++) {
-            document.querySelectorAll('.star')[i].classList.add('checked');
+        function startTimer(duration) {
+            let timer = duration;
+            const timerDisplay = document.getElementById('timer');
+            const interval = setInterval(() => {
+                const minutes = String(Math.floor(timer / 60)).padStart(2, '0');
+                const seconds = String(timer % 60).padStart(2, '0');
+
+                timerDisplay.textContent = `${minutes}:${seconds}`;
+
+                if (timer <= 0) {
+                    clearInterval(interval);
+                    alert("Time's up!");
+                } else {
+                    timer--;
+                }
+            }, 1000);
         }
-        alert(`You rated this game ${rating} stars.`);
-    });
-});
 
-updateLanguage();
+        document.querySelectorAll('.star').forEach(star => {
+            star.addEventListener('click', () => {
+                const rating = star.getAttribute('data-value');
+                document.querySelectorAll('.star').forEach(s => s.classList.remove('checked'));
+                for (let i = 0; i < rating; i++) {
+                    document.querySelectorAll('.star')[i].classList.add('checked');
+                }
+                alert(`You rated this game ${rating} stars.`);
+            });
+        });
+
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+        }
+
+        updateLanguage();
+
+        // Carousel functionality
+        let currentIndex = 0;
+        const items = document.querySelectorAll('.carousel-item');
+        const totalItems = items.length;
+
+        document.getElementById('next').addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % totalItems;
+            updateCarousel();
+        });
+
+        document.getElementById('prev').addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + totalItems) % totalItems;
+            updateCarousel();
+        });
+
+        function updateCarousel() {
+            document.getElementById('carousel-inner').style.transform = `translateX(-${currentIndex * 100}%)`;
+        }
     </script>
+</body>
+
+</html>
+
