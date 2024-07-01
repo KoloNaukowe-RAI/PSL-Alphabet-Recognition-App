@@ -2,3 +2,4 @@ Django
 pandas
 mediapipe
 opencv-contrib-python
+firebase-admin
