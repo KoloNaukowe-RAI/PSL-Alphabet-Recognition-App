@@ -6,15 +6,15 @@ from django.shortcuts import render
 from django.http import JsonResponse, StreamingHttpResponse
 from django.views import View
 from .camera import VideoCamera
+import os
+from django.conf import settings
 
 
 dataset = {
-    "Zwierzęta": ["Pies", "Kot", "Słoń", "Lew", "Tygrys", "Małpa", "Krowa", "Kura", "Zebra", "Kangur"],
-    "Owoce": ["Jabłko", "Banan", "Malina", "Winogrono", "Truskawka", "Ananas", "Mango", "Arbuz", "Agrest"],
-    "Kraje": ["Polska", "Niemcy", "Francja", "Anglia", "Hiszpania", "Rosja", "Austria"],
-    "Kolory": ["Czerwony", "Niebieski", "Zielony", "Żółty", "Fioletowy", "Pomarańczowy"],
-    "Przedmioty": ["Telefon", "Laptop", "Telewizor", "Komoda", "Lampa", "Zegar"],
-    "Zawody": ["Lekarz", "Poeta", "Policjant", "Informatyk", "Kucharz", "Kierowca", "Pilot"],
+    "Zwierzęta": ["delfin", "dzik", "koń", "kot", "krowa", "małpa", "owca", "pies", "ptak", "ryba", "słoń", "zebra"],
+    "Owoce": ["arbuz", "banan", "jabłko", "malina", "pomarańcza", "truskawka"],
+    "Warzywa": ["burak", "cebula", "dynia", "sałata", "seler"],
+    "Zawody": ["fryzjer", "kelner", "lekarz"]
 }
 
 mp_hands = mp.solutions.hands.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5)
@@ -28,14 +28,15 @@ class HomeView(View):
 class StartGameView(View):
     def get(self, request):
         difficulty = request.GET.get('difficulty', 'easy')
-        category, word = self.select_random_category_and_word(difficulty)
-        return JsonResponse({'category': category, 'word': word})
+        category, word, image_url = self.select_random_category_word_and_image(difficulty)
+        return JsonResponse({'category': category, 'word': word, 'image_url': image_url})
 
-    def select_random_category_and_word(self, difficulty):
+    def select_random_category_word_and_image(self, difficulty):
         filtered_dataset = self.filter_by_difficulty(difficulty)
         category = random.choice(list(filtered_dataset.keys()))
         word = random.choice(filtered_dataset[category])
-        return category, word
+        image_url = self.get_image_url(word)
+        return category, word, image_url
 
     def filter_by_difficulty(self, difficulty):
         if difficulty == 'easy':
@@ -51,6 +52,9 @@ class StartGameView(View):
         }
         return {k: v for k, v in filtered_dataset.items() if v}
 
+    def get_image_url(self, word):
+        image_path = os.path.join(settings.STATIC_URL, 'images_to_display', f'{word}.png')
+        return image_path
 
 class ProcessVideoFrameView(View):
     def post(self, request):

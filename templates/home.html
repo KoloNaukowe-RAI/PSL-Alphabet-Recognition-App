@@ -257,32 +257,34 @@
         <a href="#"><i class="fas fa-question-circle icon"></i>Help</a>
     </div>
 
-    <!-- Main Menu -->
-    <div id="main-menu" class="container text-center center">
-        <button class="btn custom-button" id="start-game-button">Start Game</button>
-        <button class="btn custom-button" id="add-player-button">Add Player</button>
-        <div id="difficulty-selection" class="mt-3 carousel">
-            <div class="carousel-inner" id="carousel-inner">
-                <div class="carousel-item active">
-                    <button class="btn custom-button" id="easy-button">Easy</button>
-                </div>
-                <div class="carousel-item">
-                    <button class="btn custom-button" id="medium-button">Medium</button>
-                </div>
-                <div class="carousel-item">
-                    <button class="btn custom-button" id="hard-button">Hard</button>
+        <!-- Main Menu -->
+        <div id="main-menu" class="container text-center center">
+            <button class="btn custom-button" id="start-game-button">Start Game</button>
+            <button class="btn custom-button" id="add-player-button">Add Player</button>
+            <div id="difficulty-selection" class="mt-3 carousel">
+                <div class="carousel-inner" id="carousel-inner">
+                    <div class="carousel-item active">
+                        <button class="btn custom-button" id="easy-button">Easy</button>
+                    </div>
+                    <div class="carousel-item">
+                        <button class="btn custom-button" id="medium-button">Medium</button>
+                    </div>
+                    <div class="carousel-item">
+                        <button class="btn custom-button" id="hard-button">Hard</button>
+                    </div>
                 </div>
             </div>
+            <div class="carousel-buttons">
+                <button class="btn" id="prev">‹</button>
+                <button class="btn" id="next">›</button>
+            </div>
         </div>
-        <div class="carousel-buttons">
-            <button class="btn" id="prev">‹</button>
-            <button class="btn" id="next">›</button>
-        </div>
-    </div>
+
 
     <!-- Game Section -->
     <div id="game-section" class="container text-center center hidden">
         <div id="word-display" class="mt-3" style="font-size: 24px;"></div>
+        <img id="word-image" src="" alt="Word Image" class="img-fluid" style="display: none; max-height: 300px;">
         <img id="live-camera-feed" src="/live-camera-feed/" alt="Live Camera Feed" class="img-fluid"
             style="display: none;">
         <div class="timer" id="timer"></div>
@@ -462,16 +464,28 @@
 
         function startGame() {
             const duration = document.getElementById('duration').value;
-            fetch(`/start-game?language=${language}&difficulty=${difficulty}`)
+            fetch(`/start-game/?language=${language}&difficulty=${difficulty}`)
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById('word-display').textContent = `Category: ${data.category}, Word: ${data.word}`;
+                    // Update random image source and show it
+                    const randomImage = document.getElementById('word-image');
+                    if (randomImage) {
+                        randomImage.src = data.image_url; // Assuming 'image_url' is the URL received from server
+                        randomImage.style.display = 'block';
+                    } else {
+                        console.error('Random image element not found.');
+                    }
+
+                    // Other game start operations
                     document.getElementById('live-camera-feed').style.display = 'block';
-                    document.getElementById('live-camera-feed').src = "/live-camera-feed/";
-                    document.getElementById('player-name-display').textContent = `Player: ${playerName}`;
-                    startTimer(duration * 60); 
+                    startTimer(duration * 60);
+                })
+                .catch(error => {
+                    console.error('Error starting game:', error);
+                    // Handle error as needed
                 });
         }
+
 
         function startTimer(duration) {
             let timer = duration;
