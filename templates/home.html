@@ -15,6 +15,11 @@
             color: #ffffff;
         }
 
+        .light-mode {
+            background-color: #f8f9fa;
+            color: #343a40;
+        }
+
         .center {
             display: flex;
             justify-content: center;
@@ -66,6 +71,13 @@
         .modal-footer {
             background-color: #343a40;
             color: #ffffff;
+        }
+
+        .light-mode .modal-header,
+        .light-mode .modal-body,
+        .light-mode .modal-footer {
+            background-color: #f8f9fa;
+            color: #343a40;
         }
 
         .player-name-display {
@@ -194,40 +206,66 @@
             margin-right: 10px;
         }
 
-        .carousel {
-            display: flex;
-            overflow: hidden;
-            width: 100%;
-            justify-content: center;
+        .history-section,
+        .ranking-section {
+            margin-top: 20px;
+            background-color: #343a40;
+            padding: 20px;
+            border-radius: 10px;
         }
 
-        .carousel-inner {
-            display: flex;
-            transition: transform 0.5s ease-in-out;
+        .light-mode .history-section,
+        .light-mode .ranking-section {
+            background-color: #f8f9fa;
+            color: #343a40;
         }
 
-        .carousel-item {
-            min-width: 100%;
-            text-align: center;
+        .history-title,
+        .ranking-title {
+            font-size: 1.5rem;
+            font-weight: bold;
         }
 
-        .carousel-buttons {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
+        .history-list,
+        .ranking-list {
+            list-style-type: none;
+            padding: 0;
         }
 
-        .carousel-buttons .btn {
-            background-color: #007bff;
-            border: none;
-            color: white;
+        .history-list li,
+        .ranking-list li {
             padding: 10px;
-            cursor: pointer;
-            border-radius: 5px;
+            border-bottom: 1px solid #ffffff;
         }
 
-        .carousel-buttons .btn:hover {
-            background-color: #0056b3;
+        .light-mode .history-list li,
+        .light-mode .ranking-list li {
+            border-bottom: 1px solid #343a40;
+        }
+
+        .tutorial-step {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .tutorial-button {
+            margin: 10px;
+        }
+
+        .image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .image-container img {
+            max-width: 45%;
+            margin: 10px;
+        }
+
+        .live-camera-feed {
+            max-width: 70%;
         }
     </style>
 </head>
@@ -257,36 +295,20 @@
         <a href="#"><i class="fas fa-question-circle icon"></i>Help</a>
     </div>
 
-        <!-- Main Menu -->
-        <div id="main-menu" class="container text-center center">
-            <button class="btn custom-button" id="start-game-button">Start Game</button>
-            <button class="btn custom-button" id="add-player-button">Add Player</button>
-            <div id="difficulty-selection" class="mt-3 carousel">
-                <div class="carousel-inner" id="carousel-inner">
-                    <div class="carousel-item active">
-                        <button class="btn custom-button" id="easy-button">Easy</button>
-                    </div>
-                    <div class="carousel-item">
-                        <button class="btn custom-button" id="medium-button">Medium</button>
-                    </div>
-                    <div class="carousel-item">
-                        <button class="btn custom-button" id="hard-button">Hard</button>
-                    </div>
-                </div>
-            </div>
-            <div class="carousel-buttons">
-                <button class="btn" id="prev">‹</button>
-                <button class="btn" id="next">›</button>
-            </div>
-        </div>
-
+    <!-- Main Menu -->
+    <div id="main-menu" class="container text-center center">
+        <button class="btn custom-button" id="start-game-button">Start Game</button>
+        <button class="btn custom-button" id="add-player-button">Add Player</button>
+        <button class="btn custom-button" id="tutorial-button">Tutorial</button>
+    </div>
 
     <!-- Game Section -->
     <div id="game-section" class="container text-center center hidden">
         <div id="word-display" class="mt-3" style="font-size: 24px;"></div>
-        <img id="word-image" src="" alt="Word Image" class="img-fluid" style="display: none; max-height: 300px;">
-        <img id="live-camera-feed" src="/live-camera-feed/" alt="Live Camera Feed" class="img-fluid"
-            style="display: none;">
+        <div class="image-container">
+            <img id="word-image" src="" alt="Word Image" class="img-fluid" style="display: none;">
+            <img id="live-camera-feed" src="/live-camera-feed/" alt="Live Camera Feed" class="img-fluid live-camera-feed" style="display: none;">
+        </div>
         <div class="timer" id="timer"></div>
         <div class="player-name-display" id="player-name-display"></div>
         <button class="btn custom-button" id="back-button">Back to Menu</button>
@@ -314,7 +336,7 @@
                     <form id="settings-form">
                         <div class="form-group">
                             <label for="player-name" id="player-name-label">Player Name</label>
-                            <input type="text" class="form-control" id="player-name" required>
+                            <input type="text" class="form-control" id="player-name" required maxlength="15">
                         </div>
                         <div class="form-group">
                             <label for="duration" id="duration-label">Duration (mins)</label>
@@ -327,11 +349,71 @@
                                 <option value="PL">Polish</option>
                             </select>
                         </div>
+                        <div class="form-group">
+                            <label for="difficulty-select" id="difficulty-label">Difficulty</label>
+                            <select class="form-control" id="difficulty-select">
+                                <option value="easy">Easy</option>
+                                <option value="medium">Medium</option>
+                                <option value="hard">Hard</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="theme-select" id="theme-label">Theme</label>
+                            <select class="form-control" id="theme-select">
+                                <option value="dark">Dark</option>
+                                <option value="light">Light</option>
+                            </select>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn custom-button" data-dismiss="modal" id="close-button">Close</button>
                     <button type="button" class="btn custom-button" id="save-settings-button">Save settings</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tutorial Modal -->
+    <div class="modal fade" id="tutorialModal" tabindex="-1" aria-labelledby="tutorialModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="tutorialModalLabel">Game Tutorial</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="tutorial-steps">
+                        <!-- Step 1 -->
+                        <div class="tutorial-step" id="tutorial-step-1">
+                            <h2><i class="fas fa-info-circle"></i> Welcome to Kalambury!</h2>
+                            <p>This tutorial will guide you through the basics of the game.</p>
+                            <button class="btn custom-button tutorial-button" onclick="nextStep(2)">Next <i class="fas fa-arrow-right"></i></button>
+                        </div>
+                        <!-- Step 2 -->
+                        <div class="tutorial-step hidden" id="tutorial-step-2">
+                            <h2><i class="fas fa-cog"></i> Step 1: Setting up the game</h2>
+                            <p>Enter your player name and choose the game settings.</p>
+                            <button class="btn custom-button tutorial-button" onclick="prevStep(1)"><i class="fas fa-arrow-left"></i> Previous</button>
+                            <button class="btn custom-button tutorial-button" onclick="nextStep(3)">Next <i class="fas fa-arrow-right"></i></button>
+                        </div>
+                        <!-- Step 3 -->
+                        <div class="tutorial-step hidden" id="tutorial-step-3">
+                            <h2><i class="fas fa-play-circle"></i> Step 2: Starting the game</h2>
+                            <p>Click 'Start Game' to begin.</p>
+                            <button class="btn custom-button tutorial-button" onclick="prevStep(2)"><i class="fas fa-arrow-left"></i> Previous</button>
+                            <button class="btn custom-button tutorial-button" onclick="nextStep(4)">Next <i class="fas fa-arrow-right"></i></button>
+                        </div>
+                        <!-- Step 4 -->
+                        <div class="tutorial-step hidden" id="tutorial-step-4">
+                            <h2><i class="fas fa-gamepad"></i> Step 3: Playing the game</h2>
+                            <p>Follow the instructions and have fun!</p>
+                            <button class="btn custom-button tutorial-button" onclick="prevStep(3)"><i class="fas fa-arrow-left"></i> Previous</button>
+                            <button class="btn custom-button tutorial-button" data-dismiss="modal">Finish <i class="fas fa-check-circle"></i></button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -351,12 +433,15 @@
                 'settings-button': 'Settings',
                 'start-game-button': 'Start Game',
                 'add-player-button': 'Add Player',
+                'tutorial-button': 'Tutorial',
                 'back-button': 'Back to Menu',
                 'exit-button': 'Exit',
                 'settingsModalLabel': 'Settings',
                 'player-name-label': 'Player Name',
                 'duration-label': 'Duration (mins)',
                 'language-label': 'Language',
+                'difficulty-label': 'Difficulty',
+                'theme-label': 'Theme',
                 'close-button': 'Close',
                 'save-settings-button': 'Save settings'
             },
@@ -365,12 +450,15 @@
                 'settings-button': 'Ustawienia',
                 'start-game-button': 'Rozpocznij Grę',
                 'add-player-button': 'Dodaj Gracza',
+                'tutorial-button': 'Samouczek',
                 'back-button': 'Powrót do Menu',
                 'exit-button': 'Wyjście',
                 'settingsModalLabel': 'Ustawienia',
                 'player-name-label': 'Nazwa Gracza',
                 'duration-label': 'Czas Trwania (minuty)',
                 'language-label': 'Język',
+                'difficulty-label': 'Poziom Trudności',
+                'theme-label': 'Motyw',
                 'close-button': 'Zamknij',
                 'save-settings-button': 'Zapisz ustawienia'
             }
@@ -381,25 +469,46 @@
             updateLanguage();
         });
 
+        document.getElementById('theme-select').addEventListener('change', (event) => {
+            theme = event.target.value;
+            updateTheme();
+        });
+
         function updateLanguage() {
             document.getElementById('navbar-brand').innerHTML = translations[language]['navbar-brand'] + ' <i class="fas fa-american-sign-language-interpreting"></i>';
-            document.getElementById('settings-button').textContent = translations[language]['settings-button'];
-            document.getElementById('start-game-button').textContent = translations[language]['start-game-button'];
-            document.getElementById('add-player-button').textContent = translations[language]['add-player-button'];
-            document.getElementById('back-button').textContent = translations[language]['back-button'];
-            document.getElementById('exit-button').textContent = translations[language]['exit-button'];
             document.getElementById('settingsModalLabel').textContent = translations[language]['settingsModalLabel'];
             document.getElementById('player-name-label').textContent = translations[language]['player-name-label'];
             document.getElementById('duration-label').textContent = translations[language]['duration-label'];
             document.getElementById('language-label').textContent = translations[language]['language-label'];
+            document.getElementById('difficulty-label').textContent = translations[language]['difficulty-label'];
+            document.getElementById('theme-label').textContent = translations[language]['theme-label'];
             document.getElementById('close-button').textContent = translations[language]['close-button'];
             document.getElementById('save-settings-button').textContent = translations[language]['save-settings-button'];
+            document.getElementById('start-game-button').textContent = translations[language]['start-game-button'];
+            document.getElementById('add-player-button').textContent = translations[language]['add-player-button'];
+            document.getElementById('tutorial-button').textContent = translations[language]['tutorial-button'];
+            document.getElementById('back-button').textContent = translations[language]['back-button'];
+            document.getElementById('exit-button').textContent = translations[language]['exit-button'];
+        }
+
+        function updateTheme() {
+            if (theme === 'light') {
+                document.body.classList.add('light-mode');
+            } else {
+                document.body.classList.remove('light-mode');
+            }
         }
 
         document.getElementById('save-settings-button').addEventListener('click', () => {
             playerName = document.getElementById('player-name').value;
+            difficulty = document.getElementById('difficulty-select').value;
+            if (playerName.length > 15) {
+                alert('Player name must be 15 characters or less.');
+                return;
+            }
             if (playerName) {
                 localStorage.setItem('playerName', playerName);
+                localStorage.setItem('difficulty', difficulty);
                 $('#settingsModal').modal('hide');
                 showLoadingScreen();
                 setTimeout(hideLoadingScreen, 2000);
@@ -418,6 +527,7 @@
 
         document.getElementById('start-game-button').addEventListener('click', () => {
             playerName = localStorage.getItem('playerName');
+            difficulty = localStorage.getItem('difficulty');
             if (!playerName) {
                 alert('Please enter your name in the settings.');
                 return;
@@ -425,11 +535,16 @@
             document.getElementById('main-menu').classList.add('hidden');
             document.getElementById('game-section').classList.remove('hidden');
             startGame();
+            showNotification("Game Started", "The game has started!");
         });
 
         document.getElementById('add-player-button').addEventListener('click', () => {
             let newPlayerName = prompt("Enter player's name:");
             if (newPlayerName) {
+                if (newPlayerName.length > 15) {
+                    alert('Player name must be 15 characters or less.');
+                    return;
+                }
                 playerName = newPlayerName;
                 localStorage.setItem('playerName', playerName);
                 alert(`Player ${newPlayerName} added.`);
@@ -447,45 +562,32 @@
             }
         });
 
-        document.getElementById('easy-button').addEventListener('click', () => {
-            difficulty = 'easy';
-            alert('Easy difficulty selected.');
-        });
-
-        document.getElementById('medium-button').addEventListener('click', () => {
-            difficulty = 'medium';
-            alert('Medium difficulty selected.');
-        });
-
-        document.getElementById('hard-button').addEventListener('click', () => {
-            difficulty = 'hard';
-            alert('Hard difficulty selected.');
+        document.getElementById('tutorial-button').addEventListener('click', () => {
+            $('#tutorialModal').modal('show');
         });
 
         function startGame() {
             const duration = document.getElementById('duration').value;
-            fetch(`/start-game/?language=${language}&difficulty=${difficulty}`)
+            fetch(`/start-game?language=${language}&difficulty=${difficulty}`)
                 .then(response => response.json())
                 .then(data => {
-                    // Update random image source and show it
                     const randomImage = document.getElementById('word-image');
                     if (randomImage) {
-                        randomImage.src = data.image_url; // Assuming 'image_url' is the URL received from server
+                        randomImage.src = data.image_url;
                         randomImage.style.display = 'block';
                     } else {
                         console.error('Random image element not found.');
                     }
 
-                    // Other game start operations
                     document.getElementById('live-camera-feed').style.display = 'block';
+                    document.getElementById('live-camera-feed').src = "/live-camera-feed/";
+                    document.getElementById('player-name-display').textContent = `Player: ${playerName}`;
                     startTimer(duration * 60);
                 })
                 .catch(error => {
                     console.error('Error starting game:', error);
-                    // Handle error as needed
                 });
         }
-
 
         function startTimer(duration) {
             let timer = duration;
@@ -499,6 +601,7 @@
                 if (timer <= 0) {
                     clearInterval(interval);
                     alert("Time's up!");
+                    showNotification("Time's Up", "The game has ended!");
                 } else {
                     timer--;
                 }
@@ -524,28 +627,38 @@
             document.getElementById("mySidebar").style.width = "0";
         }
 
-        updateLanguage();
-
-        // Carousel functionality
-        let currentIndex = 0;
-        const items = document.querySelectorAll('.carousel-item');
-        const totalItems = items.length;
-
-        document.getElementById('next').addEventListener('click', () => {
-            currentIndex = (currentIndex + 1) % totalItems;
-            updateCarousel();
-        });
-
-        document.getElementById('prev').addEventListener('click', () => {
-            currentIndex = (currentIndex - 1 + totalItems) % totalItems;
-            updateCarousel();
-        });
-
-        function updateCarousel() {
-            document.getElementById('carousel-inner').style.transform = `translateX(-${currentIndex * 100}%)`;
+        function showNotification(title, body) {
+            if (Notification.permission === "granted") {
+                new Notification(title, { body });
+            } else if (Notification.permission !== "denied") {
+                Notification.requestPermission().then(permission => {
+                    if (permission === "granted") {
+                        new Notification(title, { body });
+                    }
+                });
+            }
         }
+
+        function nextStep(step) {
+            document.querySelectorAll('.tutorial-step').forEach((element) => {
+                element.classList.add('hidden');
+            });
+            document.getElementById(`tutorial-step-${step}`).classList.remove('hidden');
+        }
+
+        function prevStep(step) {
+            document.querySelectorAll('.tutorial-step').forEach((element) => {
+                element.classList.add('hidden');
+            });
+            document.getElementById(`tutorial-step-${step}`).classList.remove('hidden');
+        }
+
+        // Initialize settings on page load
+        updateLanguage();
+        updateTheme();
     </script>
 </body>
 
 </html>
+
 
