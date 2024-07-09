@@ -24,6 +24,9 @@ class HomeView(View):
     def get(self, request):
         return render(request, 'home.html')
 
+class SignsView(View):
+    def get(self, request):
+        return render(request, 'signs.html')
 
 class StartGameView(View):
     def get(self, request):
