@@ -4,14 +4,14 @@ import firebase_admin
 from firebase_admin import credentials, db
 
 # Initialize the Firebase Admin SDK
-cred = credentials.Certificate('../firebase-adminsdk.json')
-with open('../database_url.txt', 'r') as file:
-    database_url = file.read()
-firebase_admin.initialize_app(cred, {
-    'databaseURL': database_url
-})
+#cred = credentials.Certificate('../firebase-adminsdk.json')
+#with open('../database_url.txt', 'r') as file:
+#    database_url = file.read()
+#firebase_admin.initialize_app(cred, {
+#    'databaseURL': database_url
+#})
 
-print(database_url)
+#print(database_url)
 
 def rotate_point(point, origin, rotation):
     # Convert rotation to radians
@@ -117,15 +117,15 @@ def save_to_firebase(augmented_data, augmented_labels):
         print("Saved sample ", i, " to Firebase")
 
 if __name__ == '__main__':
-    path_to_data = os.path.join('..', '..', 'PL_Sign_Language_Letters_Recognition', 'data_for_models', '24_07_01_17_41_19', 'recorded_data.npy')
-    path_to_labels = os.path.join('..', '..', 'PL_Sign_Language_Letters_Recognition', 'data_for_models', '24_07_01_17_41_19',
+    path_to_data = os.path.join( '..', 'PL_Sign_Language_Letters_Recognition', 'data_for_models', '24_07_01_17_41_19', 'recorded_data.npy')
+    path_to_labels = os.path.join( '..', 'PL_Sign_Language_Letters_Recognition', 'data_for_models', '24_07_01_17_41_19',
                                 'labels.npy')
     augmented_data, augmented_labels = data_augmentation(path_to_data, path_to_labels)
     print(augmented_data.shape)
 
-    path_to_save_data = os.path.join('..', '..', 'PL_Sign_Language_Letters_Recognition', 'data_for_models', '24_07_01_17_41_19', 'augmented_data.npy')
-    path_to_save_labels = os.path.join('..', '..', 'PL_Sign_Language_Letters_Recognition', 'data_for_models', '24_07_01_17_41_19', 'augmented_labels.npy')
+    path_to_save_data = os.path.join( '..', 'PL_Sign_Language_Letters_Recognition', 'data_for_models', '24_07_01_17_41_19', 'augmented_data.npy')
+    path_to_save_labels = os.path.join( '..', 'PL_Sign_Language_Letters_Recognition', 'data_for_models', '24_07_01_17_41_19', 'augmented_labels.npy')
     np.save(path_to_save_data, augmented_data)
     np.save(path_to_save_labels, augmented_labels)
 
-    save_to_firebase(augmented_data, augmented_labels)
+    #save_to_firebase(augmented_data, augmented_labels)
