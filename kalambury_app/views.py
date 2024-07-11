@@ -8,7 +8,29 @@ from django.views import View
 from .camera import VideoCamera
 import os
 from django.conf import settings
+import qrcode
+from io import BytesIO
+import base64
 
+class QRCodeView(View):
+    def get(self, request):
+        qr_text = "Twórcy dziękują Ci za grę w kalambury"
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(qr_text)
+        qr.make(fit=True)
+        img = qr.make_image(fill='black', back_color='white')
+
+        buffer = BytesIO()
+        img.save(buffer, format="PNG")
+        buffer.seek(0)
+        img_str = base64.b64encode(buffer.getvalue()).decode()
+
+        return render(request, 'qr_code.html', {'qr_code': img_str})
 
 dataset = {
     "Zwierzęta": ["delfin", "dzik", "koń", "kot", "krowa", "małpa", "owca", "pies", "ptak", "ryba", "słoń", "zebra"],
