@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-color: #1f1f1f;
+            font-family: 'Roboto', sans-serif;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .custom-button {
+            background: linear-gradient(45deg, #007bff, #00d4ff);
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            margin: 10px;
+            text-decoration: none;
+            color: #ffffff;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .custom-button:hover {
+            background: linear-gradient(45deg, #0056b3, #0096d6);
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .custom-button:active {
+            background: linear-gradient(45deg, #004085, #0077aa);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <h1>QR Code</h1>
+    <img src="data:image/png;base64,{{ qr_code }}" alt="QR Code">
+    <button class="btn custom-button" onclick="window.location.href='/'">Powrót do Menu</button>
+</body>
+</html>
+
+
+
+
