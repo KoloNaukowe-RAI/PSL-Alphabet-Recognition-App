@@ -26,6 +26,7 @@
             align-items: center;
             height: calc(100vh - 150px);
             flex-direction: column;
+            text-align: center;
         }
 
         .custom-button {
@@ -257,6 +258,7 @@
             justify-content: center;
             align-items: center;
             margin-top: 20px;
+            flex-wrap: wrap;
         }
 
         .image-container img {
@@ -266,6 +268,57 @@
 
         .live-camera-feed {
             max-width: 70%;
+        }
+
+        .social-icons {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            right: 20px;
+        }
+
+        .social-icons a {
+            color: #ffffff;
+            font-size: 1.5rem;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: #00d4ff;
+        }
+
+        @media (max-width: 768px) {
+            .custom-button {
+                width: 80%;
+                margin: 5px 0;
+            }
+
+            .image-container img {
+                max-width: 90%;
+            }
+
+            .live-camera-feed {
+                max-width: 90%;
+            }
+
+            .navbar {
+                flex-direction: column;
+            }
+
+            .navbar-brand-container {
+                justify-content: center;
+                margin-top: 10px;
+            }
+
+            .sidebar a {
+                font-size: 20px;
+            }
+
+            .social-icons {
+                position: static;
+                margin-top: 10px;
+            }
         }
     </style>
 </head>
@@ -283,6 +336,10 @@
         <button class="openbtn" onclick="openNav()">&#9776; Menu</button>
         <div class="navbar-brand-container">
             <a class="navbar-brand" href="#" id="navbar-brand">Kalambury <i class="fas fa-american-sign-language-interpreting"></i></a>
+        </div>
+        <div class="social-icons">
+            <a href="https://www.facebook.com/RobotykaAutomatykaInformatyka" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.linkedin.com/company/kn-rai/" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a>
         </div>
     </nav>
 
@@ -390,29 +447,42 @@
                         <!-- Step 1 -->
                         <div class="tutorial-step" id="tutorial-step-1">
                             <h2><i class="fas fa-info-circle"></i> Welcome to Kalambury!</h2>
-                            <p>This tutorial will guide you through the basics of the game.</p>
-                            <button class="btn custom-button tutorial-button" onclick="nextStep(2)">Next <i class="fas fa-arrow-right"></i></button>
+                            <p id="tutorial-step-1-text">This tutorial will guide you through the basics of the game.</p>
+                            <div>
+                                <button class="btn custom-button tutorial-button" onclick="prevStep(1)" disabled>Previous</button>
+                                <button class="btn custom-button tutorial-button" onclick="toggleTranslation(1)">Translate</button>
+                                <button class="btn custom-button tutorial-button" onclick="nextStep(2)">Next</button>
+                            </div>
                         </div>
                         <!-- Step 2 -->
                         <div class="tutorial-step hidden" id="tutorial-step-2">
                             <h2><i class="fas fa-cog"></i> Step 1: Setting up the game</h2>
-                            <p>Enter your player name and choose the game settings.</p>
-                            <button class="btn custom-button tutorial-button" onclick="prevStep(1)"><i class="fas fa-arrow-left"></i> Previous</button>
-                            <button class="btn custom-button tutorial-button" onclick="nextStep(3)">Next <i class="fas fa-arrow-right"></i></button>
+                            <p id="tutorial-step-2-text">Enter your player name and choose the game settings.</p>
+                            <div>
+                                <button class="btn custom-button tutorial-button" onclick="prevStep(1)">Previous</button>
+                                <button class="btn custom-button tutorial-button" onclick="toggleTranslation(2)">Translate</button>
+                                <button class="btn custom-button tutorial-button" onclick="nextStep(3)">Next</button>
+                            </div>
                         </div>
                         <!-- Step 3 -->
                         <div class="tutorial-step hidden" id="tutorial-step-3">
                             <h2><i class="fas fa-play-circle"></i> Step 2: Starting the game</h2>
-                            <p>Click 'Start Game' to begin.</p>
-                            <button class="btn custom-button tutorial-button" onclick="prevStep(2)"><i class="fas fa-arrow-left"></i> Previous</button>
-                            <button class="btn custom-button tutorial-button" onclick="nextStep(4)">Next <i class="fas fa-arrow-right"></i></button>
+                            <p id="tutorial-step-3-text">Click 'Start Game' to begin.</p>
+                            <div>
+                                <button class="btn custom-button tutorial-button" onclick="prevStep(2)">Previous</button>
+                                <button class="btn custom-button tutorial-button" onclick="toggleTranslation(3)">Translate</button>
+                                <button class="btn custom-button tutorial-button" onclick="nextStep(4)">Next</button>
+                            </div>
                         </div>
                         <!-- Step 4 -->
                         <div class="tutorial-step hidden" id="tutorial-step-4">
                             <h2><i class="fas fa-gamepad"></i> Step 3: Playing the game</h2>
-                            <p>Follow the instructions and have fun!</p>
-                            <button class="btn custom-button tutorial-button" onclick="prevStep(3)"><i class="fas fa-arrow-left"></i> Previous</button>
-                            <button class="btn custom-button tutorial-button" data-dismiss="modal">Finish <i class="fas fa-check-circle"></i></button>
+                            <p id="tutorial-step-4-text">Follow the instructions and have fun!</p>
+                            <div>
+                                <button class="btn custom-button tutorial-button" onclick="prevStep(3)">Previous</button>
+                                <button class="btn custom-button tutorial-button" onclick="toggleTranslation(4)">Translate</button>
+                                <button class="btn custom-button tutorial-button" data-dismiss="modal">Finish</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -427,6 +497,7 @@
         let playerName = '';
         let language = 'EN';
         let difficulty = 'easy';
+        let theme = 'dark';
 
         const translations = {
             'EN': {
@@ -444,7 +515,11 @@
                 'difficulty-label': 'Difficulty',
                 'theme-label': 'Theme',
                 'close-button': 'Close',
-                'save-settings-button': 'Save settings'
+                'save-settings-button': 'Save settings',
+                'tutorial-step-1-text': 'This tutorial will guide you through the basics of the game.',
+                'tutorial-step-2-text': 'Enter your player name and choose the game settings.',
+                'tutorial-step-3-text': "Click 'Start Game' to begin.",
+                'tutorial-step-4-text': 'Follow the instructions and have fun!'
             },
             'PL': {
                 'navbar-brand': 'Kalambury',
@@ -461,7 +536,11 @@
                 'difficulty-label': 'Poziom Trudności',
                 'theme-label': 'Motyw',
                 'close-button': 'Zamknij',
-                'save-settings-button': 'Zapisz ustawienia'
+                'save-settings-button': 'Zapisz ustawienia',
+                'tutorial-step-1-text': 'Ten samouczek poprowadzi Cię przez podstawy gry.',
+                'tutorial-step-2-text': 'Wprowadź nazwę gracza i wybierz ustawienia gry.',
+                'tutorial-step-3-text': "Kliknij 'Rozpocznij Grę', aby rozpocząć.",
+                'tutorial-step-4-text': 'Postępuj zgodnie z instrukcjami i baw się dobrze!'
             }
         };
 
@@ -503,6 +582,8 @@
         document.getElementById('save-settings-button').addEventListener('click', () => {
             playerName = document.getElementById('player-name').value;
             difficulty = document.getElementById('difficulty-select').value;
+            theme = document.getElementById('theme-select').value;
+
             if (playerName.length > 15) {
                 alert('Player name must be 15 characters or less.');
                 return;
@@ -510,6 +591,7 @@
             if (playerName) {
                 localStorage.setItem('playerName', playerName);
                 localStorage.setItem('difficulty', difficulty);
+                localStorage.setItem('theme', theme);
                 $('#settingsModal').modal('hide');
                 showLoadingScreen();
                 setTimeout(hideLoadingScreen, 2000);
@@ -529,6 +611,7 @@
         document.getElementById('start-game-button').addEventListener('click', () => {
             playerName = localStorage.getItem('playerName');
             difficulty = localStorage.getItem('difficulty');
+            theme = localStorage.getItem('theme');
             if (!playerName) {
                 alert('Please enter your name in the settings.');
                 return;
@@ -654,7 +737,20 @@
             document.getElementById(`tutorial-step-${step}`).classList.remove('hidden');
         }
 
+        function toggleTranslation(step) {
+            const textElement = document.getElementById(`tutorial-step-${step}-text`);
+            const originalText = translations['EN'][`tutorial-step-${step}-text`];
+            const translatedText = translations['PL'][`tutorial-step-${step}-text`];
+            if (textElement.textContent === originalText) {
+                textElement.textContent = translatedText;
+            } else {
+                textElement.textContent = originalText;
+            }
+        }
+
         // Initialize settings on page load
+        language = localStorage.getItem('language') || 'EN';
+        theme = localStorage.getItem('theme') || 'dark';
         updateLanguage();
         updateTheme();
     </script>
