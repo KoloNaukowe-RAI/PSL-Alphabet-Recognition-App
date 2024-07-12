@@ -155,10 +155,10 @@
             height: 100%;
             width: 0;
             position: fixed;
-            z-index: 1001;
+            z-index: 1;
             top: 0;
             left: 0;
-            background-color: #343a40;
+            background-color: #111;
             overflow-x: hidden;
             transition: 0.5s;
             padding-top: 60px;
@@ -168,15 +168,19 @@
             padding: 8px 8px 8px 32px;
             text-decoration: none;
             font-size: 25px;
-            color: #ffffff;
+            color: #818181;
             display: block;
             transition: 0.3s;
         }
 
-        .sidebar a:hover,
+        .sidebar a:hover {
+            color: #f1f1f1;
+            background-color: #00d4ff;
+        }
+
         .sidebar a.active {
-            color: #00d4ff;
-            background-color: #1f1f1f;
+            color: #f1f1f1;
+            background-color: #007bff;
         }
 
         .sidebar .closebtn {
@@ -345,10 +349,11 @@
     <div id="mySidebar" class="sidebar">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
         <a href="#" class="active"><i class="fas fa-home icon"></i>Home</a>
-        <a href="signs/"><i class="fas fa-american-sign-language-interpreting"></i>Signs</a>
+        <a href="signs/"><i class="fas fa-american-sign-language-interpreting icon"></i>Signs</a>
         <a href="qr_code/"><i class="fas fa-qrcode icon"></i>QR Code</a>
         <a href="#" data-toggle="modal" data-target="#settingsModal"><i class="fas fa-cog icon"></i>Settings</a>
         <a href="#"><i class="fas fa-chart-line icon"></i>Statistics</a>
+        <a href="feedback/"><i class="fas fa-comments icon"></i>Feedback</a>
     </div>
 
     <!-- Main Menu -->

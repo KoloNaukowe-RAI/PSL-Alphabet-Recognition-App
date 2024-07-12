@@ -16,6 +16,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from .forms import FeedbackForm
 
+
 def feedback_view(request):
     if request.method == 'POST':
         form = FeedbackForm(request.POST)
@@ -26,9 +27,11 @@ def feedback_view(request):
         form = FeedbackForm()
     return render(request, 'feedback.html', {'form': form})
 
+
 def feedback_thanks_view(request):
     return render(request, 'feedback_thanks.html')
-    
+
+
 class QRCodeView(View):
     def get(self, request):
         qr_text = "Twórcy dziękują Ci za grę w kalambury"
@@ -49,6 +52,7 @@ class QRCodeView(View):
 
         return render(request, 'qr_code.html', {'qr_code': img_str})
 
+
 dataset = {
     "Zwierzęta": ["delfin", "dzik", "koń", "kot", "krowa", "małpa", "owca", "pies", "ptak", "ryba", "słoń", "zebra"],
     "Owoce": ["arbuz", "banan", "jabłko", "malina", "pomarańcza", "truskawka"],
@@ -63,9 +67,11 @@ class HomeView(View):
     def get(self, request):
         return render(request, 'home.html')
 
+
 class SignsView(View):
     def get(self, request):
         return render(request, 'signs.html')
+
 
 class StartGameView(View):
     def get(self, request):
@@ -97,6 +103,7 @@ class StartGameView(View):
     def get_image_url(self, word):
         image_path = os.path.join(settings.STATIC_URL, 'images_to_display', f'{word}.png')
         return image_path
+
 
 class ProcessVideoFrameView(View):
     def post(self, request):
