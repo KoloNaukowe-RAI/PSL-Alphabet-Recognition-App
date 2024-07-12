@@ -1,8 +1,12 @@
-from django import forms
-from .models import Feedback
+from django.db import models
 
-class FeedbackForm(forms.ModelForm):
-    class Meta:
-        model = Feedback
-        fields = ['name', 'email', 'gender', 'ratingBefore', 'ratingAfter', 'message']
+class Feedback(models.Model):
+    name = models.CharField(max_length=15)
+    email = models.EmailField()
+    gender = models.CharField(max_length=10)
+    ratingBefore = models.IntegerField()
+    ratingAfter = models.IntegerField()
+    message = models.TextField(max_length=100)
 
+    def __str__(self):
+        return self.name
