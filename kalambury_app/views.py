@@ -11,7 +11,24 @@ from django.conf import settings
 import qrcode
 from io import BytesIO
 import base64
+from django.views.generic.edit import FormView
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from .forms import FeedbackForm
 
+def feedback_view(request):
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('feedback_thanks'))
+    else:
+        form = FeedbackForm()
+    return render(request, 'feedback.html', {'form': form})
+
+def feedback_thanks_view(request):
+    return render(request, 'feedback_thanks.html')
+    
 class QRCodeView(View):
     def get(self, request):
         qr_text = "Twórcy dziękują Ci za grę w kalambury"
