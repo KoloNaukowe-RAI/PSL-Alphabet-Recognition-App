@@ -117,6 +117,8 @@ def save_to_firebase(augmented_data, augmented_labels):
         print("Saved sample ", i, " to Firebase")
 
 if __name__ == '__main__':
+
+    #ADD additional '..' if directories dont match or just navigate to designated folder with PL_Sign_Language
     path_to_data = os.path.join( '..', 'PL_Sign_Language_Letters_Recognition', 'data_for_models', '24_07_01_17_41_19', 'recorded_data.npy')
     path_to_labels = os.path.join( '..', 'PL_Sign_Language_Letters_Recognition', 'data_for_models', '24_07_01_17_41_19',
                                 'labels.npy')
