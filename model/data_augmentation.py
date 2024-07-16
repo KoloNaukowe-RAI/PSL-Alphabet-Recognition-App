@@ -111,10 +111,12 @@ def data_augmentation(path_to_dir, number_of_augmented_samples=10, min_rotation=
             if i < data_len:
                 # Duplicate each frame
                 data_to_augment = np.repeat(data_to_augment, 2, axis=0)
+                augmented_labels.append(labels[i])
+            else:
+                augmented_labels.append(labels_long[i - data_len])
 
             # Append the augmented data
             augmented_data.append(data_to_augment)
-            augmented_labels.append(labels[i])
 
         if i % 100 == 1 or i == (number_of_samples - 1) and i != 0:
             # Save the augmented data to the disk to prevent memory issues and make it run faster
@@ -134,14 +136,6 @@ def data_augmentation(path_to_dir, number_of_augmented_samples=10, min_rotation=
             augmented_data = []
             augmented_labels = []
 
-
-    # Convert lists to numpy arrays
-    augmented_data = np.array(augmented_data)
-    augmented_labels = np.array(augmented_labels)
-
-    # Return the augmented data
-    return augmented_data, augmented_labels
-
 def save_to_firebase(augmented_data, augmented_labels):
     ref = db.reference('augmented_data')
 
@@ -158,8 +152,7 @@ if __name__ == '__main__':
 
     #ADD additional '..' if directories dont match or just navigate to designated folder with PL_Sign_Language
     dir_with_data = os.path.join( '..', '..', 'PL_Sign_Language_Letters_Recognition', 'data_for_models', '24_07_16_20_58_47')
-    augmented_data, augmented_labels = data_augmentation(dir_with_data)
-    print(augmented_data.shape)
+    data_augmentation(dir_with_data)
 
     # path_to_save_data = os.path.join(dir_with_data, 'augmented_data.npy')
     # path_to_save_labels = os.path.join(dir_with_data, 'augmented_labels.npy')
