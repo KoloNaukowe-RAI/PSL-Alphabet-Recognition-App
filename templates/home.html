@@ -7,9 +7,9 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
+      <style>
         body {
-            background-color: #1f1f1f;
+            background-color: #121212;
             font-family: 'Roboto', sans-serif;
             color: #ffffff;
         }
@@ -29,26 +29,47 @@
         }
 
         .custom-button {
-            background: linear-gradient(45deg, #007bff, #00d4ff);
+            background-color: #2196F3;
             border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
+            border-radius: 8px;
+            padding: 8px 16px; 
             margin: 10px;
             text-decoration: none;
             color: #ffffff;
             display: inline-block;
+            width: 100%;
+            max-width: 250px; 
+            transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+            position: relative;
+        }
+
+        .custom-button::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            border: 2px solid transparent;
+            border-radius: 8px;
             transition: all 0.3s ease;
         }
 
         .custom-button:hover {
-            background: linear-gradient(45deg, #0056b3, #0096d6);
-            transform: translateY(-2px);
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #1976D2;
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(25, 118, 210, 0.3);
+        }
+
+        .custom-button:hover::before {
+            border-color: #2196F3;
+            box-shadow: 0 0 8px #2196F3;
         }
 
         .custom-button:active {
-            background: linear-gradient(45deg, #004085, #0077aa);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            background-color: #0D47A1;
+            transform: scale(0.98);
         }
 
         .hidden {
@@ -62,15 +83,20 @@
         .timer {
             font-size: 2rem;
             font-weight: bold;
-            color: #dc3545;
+            color: #FF5252;
             margin-top: 20px;
+        }
+
+        .modal-lg {
+            max-width: 80%; 
         }
 
         .modal-header,
         .modal-body,
         .modal-footer {
-            background-color: #343a40;
+            background-color: #1F1F1F;
             color: #ffffff;
+            border: none;
         }
 
         .light-mode .modal-header,
@@ -87,7 +113,7 @@
         }
 
         .navbar {
-            background-color: #007bff;
+            background-color: #2196F3;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -106,6 +132,7 @@
             justify-content: center;
             text-align: center;
             color: #ffffff;
+            font-size: 1.5rem;
         }
 
         .navbar-brand i {
@@ -114,6 +141,16 @@
 
         .openbtn {
             margin-right: auto;
+            background-color: #2196F3;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            padding: 10px 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        .openbtn:hover {
+            background-color: #1976D2;
         }
 
         .loading-screen {
@@ -122,7 +159,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(255, 255, 255, 0.8);
+            background-color: rgba(18, 18, 18, 0.9);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -151,7 +188,7 @@
             color: #ffc107;
         }
 
-               .sidebar {
+        .sidebar {
             height: 100%;
             width: 0;
             position: fixed;
@@ -163,6 +200,7 @@
             transition: 0.5s;
             padding-top: 60px;
         }
+
         .sidebar a {
             padding: 8px 8px 8px 32px;
             text-decoration: none;
@@ -171,35 +209,23 @@
             display: block;
             transition: 0.3s;
         }
+
         .sidebar a:hover {
-            color: #007bff;
+            color: #2196F3;
             background-color: #111;
         }
+
         .sidebar a.active {
-            color: #007bff;
+            color: #2196F3;
             background-color: #111;
         }
+
         .sidebar .closebtn {
             position: absolute;
             top: 0;
             right: 25px;
             font-size: 36px;
             margin-left: 50px;
-        }
-
-        .openbtn {
-            font-size: 20px;
-            cursor: pointer;
-            background-color: #007bff;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            transition: 0.3s;
-        }
-
-        .openbtn:hover {
-            background-color: #0056b3;
         }
 
         .icon {
@@ -239,8 +265,8 @@
         }
 
         .light-mode .history-list li,
-        .light-mode .ranking-list li {
-            border-bottom: 1px solid #343a40;
+        .ranking-list li {
+            border-bottom: 1px solid #1f1f1f;
         }
 
         .tutorial-step {
@@ -249,7 +275,45 @@
         }
 
         .tutorial-button {
+            background-color: #2196F3;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 16px; /* Zmniejszone padding */
             margin: 10px;
+            text-decoration: none;
+            color: #ffffff;
+            display: inline-block;
+            transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+            position: relative;
+        }
+
+        .tutorial-button::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .tutorial-button:hover {
+            background-color: #1976D2;
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(25, 118, 210, 0.3);
+        }
+
+        .tutorial-button:hover::before {
+            border-color: #2196F3;
+            box-shadow: 0 0 8px #2196F3;
+        }
+
+        .tutorial-button:active {
+            background-color: #0D47A1;
+            transform: scale(0.98);
         }
 
         .image-container {
@@ -284,7 +348,20 @@
         }
 
         .social-icons a:hover {
-            color: #00d4ff;
+            color: rgba(33, 150, 243, 0.8);
+        }
+
+        .login-box {
+            background: rgba(0, 0, 51, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+            box-shadow: 0 0 15px rgba(33, 150, 243, 0.8);
+        }
+
+        .form-control:focus {
+            border-color: #2196F3;
+            box-shadow: 0 0 5px rgba(33, 150, 243, 0.5);
         }
 
         @media (max-width: 768px) {
@@ -354,9 +431,11 @@
 
     <!-- Main Menu -->
     <div id="main-menu" class="container text-center center">
-        <button class="btn custom-button" id="start-game-button">Start Game</button>
-        <button class="btn custom-button" id="add-player-button">Add Player</button>
-        <button class="btn custom-button" id="tutorial-button">Tutorial</button>
+        <div class="login-box">
+            <button class="btn custom-button" id="start-game-button">Start Game</button>
+            <button class="btn custom-button" id="add-player-button">Add Player</button>
+            <button class="btn custom-button" id="tutorial-button">Tutorial</button>
+        </div>
     </div>
 
     <!-- Game Section -->
@@ -416,7 +495,7 @@
                         </div>
                         <div class="form-group">
                             <label for="theme-select" id="theme-label">Theme</label>
-                            <select class="form-control" id="theme-select">
+                                                        <select class="form-control" id="theme-select">
                                 <option value="dark">Dark</option>
                                 <option value="light">Light</option>
                             </select>
@@ -568,6 +647,14 @@
             document.getElementById('tutorial-button').textContent = translations[language]['tutorial-button'];
             document.getElementById('back-button').textContent = translations[language]['back-button'];
             document.getElementById('exit-button').textContent = translations[language]['exit-button'];
+            updateTutorialLanguage();
+        }
+
+        function updateTutorialLanguage() {
+            document.getElementById('tutorial-step-1-text').textContent = translations[language]['tutorial-step-1-text'];
+            document.getElementById('tutorial-step-2-text').textContent = translations[language]['tutorial-step-2-text'];
+            document.getElementById('tutorial-step-3-text').textContent = translations[language]['tutorial-step-3-text'];
+            document.getElementById('tutorial-step-4-text').textContent = translations[language]['tutorial-step-4-text'];
         }
 
         function updateTheme() {
@@ -739,7 +826,7 @@
         function toggleTranslation(step) {
             const currentText = document.getElementById(`tutorial-step-${step}-text`).textContent;
             const translatedText = translations[language][`tutorial-step-${step}-text`];
-            document.getElementById(`tutorial-step-${step}-text`).textContent = currentText === translatedText ? currentText : translatedText;
+            document.getElementById(`tutorial-step-${step}-text`).textContent = currentText === translatedText ? translations['PL'][`tutorial-step-${step}-text`] : translatedText;
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -749,3 +836,5 @@
     </script>
 </body>
 </html>
+
+
