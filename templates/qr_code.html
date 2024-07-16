@@ -55,7 +55,7 @@
       .sidebar a {
           padding: 8px 8px 8px 32px;
           text-decoration: none;
-          font-size: 25px;
+          font-size: 20px;
           color: #ffffff;
           display: block;
           transition: 0.3s;
@@ -65,7 +65,7 @@
           background-color: #111;
       }
       .sidebar a.active {
-          color: #f1f1f1;
+          color: #ffffff;
           background-color: #007bff;
       }
       .sidebar .closebtn {
@@ -84,32 +84,41 @@
           border: none;
       }
       .openbtn:hover {
-          background-color: #007bff;
+          background-color: #0056b3;
       }
       .container {
           max-width: 600px;
           margin: 50px auto;
-          background-color: #007bff;
-          padding: 20px;
+          background-color: #222;
+          padding: 30px;
           border-radius: 10px;
           text-align: center;
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+      }
+      .container:hover {
+          background-color: #2a2a2a;
+          transition: background-color 0.3s ease;
       }
       .btn-primary {
-          background-color: #ffffff;
-          color: #007bff;
+          background-color: #007bff;
+          color: #ffffff;
           border: 1px solid #007bff;
+          border-radius: 5px;
       }
       .btn-primary:hover {
-          background-color: #e6e6e6;
-          color: #007bff;
-      }
-      .btn-primary:focus, .btn-primary.focus {
-          box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
+          background-color: #0056b3;
+          color: #ffffff;
       }
       .btn-block {
           display: block;
           width: 100%;
           margin-top: 20px;
+      }
+      .img-fluid {
+          max-width: 100%;
+          height: auto;
+          border-radius: 10px;
+          margin-bottom: 20px;
       }
   </style>
 </head>
@@ -134,10 +143,9 @@
       <a href="#" class="sidebar-link" data-translate-key="help"><i class="fas fa-question-circle icon"></i><span class="link-text">Help</span></a>
   </div>
 
-  <div class="d-flex justify-content-center my-3" id="header"><h1>QR Code</h1></div>
   <div class="container">
-      <h2 data-translate-key="qr-code">QR Code</h2>
-      <img src="data:image/png;base64,{{ qr_code }}" alt="QR Code">
+      <h2 data-translate-key="qr-code">Scan QR Code</h2>
+      <img src="data:image/png;base64,{{ qr_code }}" alt="QR Code" class="img-fluid">
       <button class="btn btn-primary btn-block" onclick="window.location.href='{% url 'home' %}'" data-translate-key="return-menu">Return to Menu</button>
   </div>
 
@@ -172,7 +180,6 @@
 
       function toggleLanguage(lang) {
           document.querySelector('.navbar-brand').innerHTML = `Kalambury <i class="fas fa-american-sign-language-interpreting"></i>`;
-          document.querySelector('#header h1').textContent = translations[lang]['header'];
           document.querySelector('.container h2').textContent = translations[lang]['qr-code'];
           document.querySelector('.btn-primary').textContent = translations[lang]['return-menu'];
 
@@ -200,6 +207,7 @@
   </script>
 </body>
 </html>
+
 
 
 

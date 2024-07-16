@@ -1,11 +1,18 @@
 from django.db import models
 
 class Feedback(models.Model):
+    GENDER_CHOICES = [
+        ('male', 'Male'),
+        ('female', 'Female'),
+        ('other', 'Other'),
+    ]
+    RATING_CHOICES = [(i, str(i)) for i in range(6)]
+
     name = models.CharField(max_length=15)
     email = models.EmailField()
-    gender = models.CharField(max_length=10)
-    ratingBefore = models.IntegerField()
-    ratingAfter = models.IntegerField()
+    gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
+    ratingBefore = models.IntegerField(choices=RATING_CHOICES)
+    ratingAfter = models.IntegerField(choices=RATING_CHOICES)
     message = models.TextField(max_length=100)
 
     def __str__(self):
