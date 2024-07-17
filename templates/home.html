@@ -7,7 +7,7 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-      <style>
+    <style>
         body {
             background-color: #121212;
             font-family: 'Roboto', sans-serif;
@@ -32,39 +32,22 @@
             background-color: #2196F3;
             border: none;
             border-radius: 8px;
-            padding: 8px 16px; 
+            padding: 8px 16px;
             margin: 10px;
             text-decoration: none;
             color: #ffffff;
             display: inline-block;
+            max-width: 250px;
             width: 100%;
-            max-width: 250px; 
             transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
             text-align: center;
             position: relative;
-        }
-
-        .custom-button::before {
-            content: '';
-            position: absolute;
-            top: -3px;
-            left: -3px;
-            right: -3px;
-            bottom: -3px;
-            border: 2px solid transparent;
-            border-radius: 8px;
-            transition: all 0.3s ease;
         }
 
         .custom-button:hover {
             background-color: #1976D2;
             transform: scale(1.05);
             box-shadow: 0 4px 15px rgba(25, 118, 210, 0.3);
-        }
-
-        .custom-button:hover::before {
-            border-color: #2196F3;
-            box-shadow: 0 0 8px #2196F3;
         }
 
         .custom-button:active {
@@ -88,7 +71,7 @@
         }
 
         .modal-lg {
-            max-width: 80%; 
+            max-width: 80%;
         }
 
         .modal-header,
@@ -115,7 +98,7 @@
         .navbar {
             background-color: #2196F3;
             display: flex;
-            justify-content: space-between;
+            justify-content: center; /* Center the content */
             align-items: center;
             padding: 0 20px;
         }
@@ -278,7 +261,7 @@
             background-color: #2196F3;
             border: none;
             border-radius: 8px;
-            padding: 8px 16px; /* Zmniejszone padding */
+            padding: 8px 16px;
             margin: 10px;
             text-decoration: none;
             color: #ffffff;
@@ -286,29 +269,14 @@
             transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
             text-align: center;
             position: relative;
-        }
-
-        .tutorial-button::before {
-            content: '';
-            position: absolute;
-            top: -3px;
-            left: -3px;
-            right: -3px;
-            bottom: -3px;
-            border: 2px solid transparent;
-            border-radius: 8px;
-            transition: all 0.3s ease;
+            max-width: 150px;
+            width: 100%;
         }
 
         .tutorial-button:hover {
             background-color: #1976D2;
             transform: scale(1.05);
             box-shadow: 0 4px 15px rgba(25, 118, 210, 0.3);
-        }
-
-        .tutorial-button:hover::before {
-            border-color: #2196F3;
-            box-shadow: 0 0 8px #2196F3;
         }
 
         .tutorial-button:active {
@@ -364,6 +332,16 @@
             box-shadow: 0 0 5px rgba(33, 150, 243, 0.5);
         }
 
+        #settingsModal .form-group label {
+            color: #2196F3;
+            transition: color 0.3s ease;
+        }
+
+        #settingsModal .form-group input:focus + label,
+        #settingsModal .form-group select:focus + label {
+            color: #1976D2;
+        }
+
         @media (max-width: 768px) {
             .custom-button {
                 width: 80%;
@@ -395,6 +373,11 @@
                 position: static;
                 margin-top: 10px;
             }
+        }
+
+        #settingsModal .modal-footer {
+            display: flex;
+            justify-content: space-between;
         }
     </style>
 </head>
@@ -460,7 +443,7 @@
 
     <!-- Settings Modal -->
     <div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="settingsModalLabel">Settings</h5>
@@ -495,7 +478,7 @@
                         </div>
                         <div class="form-group">
                             <label for="theme-select" id="theme-label">Theme</label>
-                                                        <select class="form-control" id="theme-select">
+                            <select class="form-control" id="theme-select">
                                 <option value="dark">Dark</option>
                                 <option value="light">Light</option>
                             </select>
@@ -836,5 +819,7 @@
     </script>
 </body>
 </html>
+
+
 
 
