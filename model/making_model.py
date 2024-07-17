@@ -23,11 +23,11 @@ class SignLanguageModel:
         self.history = None
         self.label_dict = None
         self.reverse_label_dict = None
-        self.input_shape = (30, 21*3)
+        self.input_shape = (60, 21*3)
 
     def load_data(self):
-        labels = np.load(os.path.join(self.data_dir, "labels.npy"))
-        recorded_data = np.load(os.path.join(self.data_dir, "recorded_data.npy"))
+        labels = np.load(os.path.join(self.data_dir, "augmented_labels.npy"))
+        recorded_data = np.load(os.path.join(self.data_dir, "augmented_data.npy"))
         num_classes = len(set(labels))
         self.label_dict = {label: i for i, label in enumerate(sorted(set(labels)))}
         self.reverse_label_dict = {i: label for label, i in self.label_dict.items()} 
@@ -37,9 +37,9 @@ class SignLanguageModel:
         X_train, X_temp, y_train, y_temp = train_test_split(recorded_data, labels_categorical, test_size=0.2, random_state=None, stratify=labels_categorical)
         X_val, X_test, y_val, y_test = train_test_split(X_temp, y_temp, test_size=0.5, random_state=None, stratify=y_temp)
 
-        X_train = X_train.reshape(-1, 30, 21*3)
-        X_val = X_val.reshape(-1, 30, 21*3)
-        X_test = X_test.reshape(-1, 30, 21*3)
+        X_train = X_train.reshape(-1, 60, 21*3)
+        X_val = X_val.reshape(-1, 60, 21*3)
+        X_test = X_test.reshape(-1, 60, 21*3)
         
         return X_train, X_val, X_test, y_train, y_val, y_test, num_classes
 
@@ -65,9 +65,9 @@ class SignLanguageModel:
     def train(self, X_train, y_train, X_val, y_val, num_classes):
         self.model = self.build_model(num_classes)
         tb_callback = TensorBoard(log_dir=self.log_dir)
-        early_stopping_callback = EarlyStopping(monitor='val_categorical_accuracy', patience=8, restore_best_weights=True)
-        reduce_lr_callback = ReduceLROnPlateau(monitor='val_categorical_accuracy', factor=0.2, patience=4, min_lr=0.0001)
-        self.history = self.model.fit(X_train, y_train, epochs=50, batch_size=64, validation_data=(X_val, y_val), callbacks=[tb_callback, early_stopping_callback, reduce_lr_callback])
+        early_stopping_callback = EarlyStopping(monitor='val_categorical_accuracy', patience=5, restore_best_weights=True)
+        reduce_lr_callback = ReduceLROnPlateau(monitor='val_categorical_accuracy', factor=0.2, patience=3, min_lr=0.0001)
+        self.history = self.model.fit(X_train, y_train, epochs=41, batch_size=256, validation_data=(X_val, y_val), callbacks=[tb_callback, early_stopping_callback, reduce_lr_callback])
 
     def evaluate(self, X_test, y_test):
         loss, accuracy = self.model.evaluate(X_test, y_test)
@@ -106,7 +106,8 @@ class SignLanguageModel:
         current_time = time.strftime("%y_%m_%d_%H_%M_%S", t)
         self.model.save(os.path.join(self.model_dir, current_time+".h5"))
 
-data_dir = "data_for_models/24_07_01_17_41_19"
+data_dir = "data_for_models/24_07_17_15_33_35"
+data_dir = os.path.join( '..', 'PL_Sign_Language_Letters_Recognition', 'data_for_models', '24_07_17_15_33_35')
 
 if __name__ == '__main__':
     print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
