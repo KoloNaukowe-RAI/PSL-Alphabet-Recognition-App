@@ -12,6 +12,15 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+
+"""
+------------------------------------------------------------------
+MODEL LOADING PRECUDURE 
+# model_file = os.path.join('models', '24_07_17_16_40_44_FINAL.h5')
+# model = tf.keras.models.load_model(model_file)
+------------------------------------------------------------------
+"""
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 print(BASE_DIR)
