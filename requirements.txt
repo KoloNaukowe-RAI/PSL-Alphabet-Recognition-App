@@ -4,4 +4,6 @@ mediapipe
 opencv-contrib-python
 firebase-admin
 qrcode[pil]
+keras
+tensorflow
 
