@@ -216,13 +216,6 @@ body {
     object-fit: cover;
 }
 
-.social-icons {
-    display: flex;
-    align-items: center;
-    position: absolute;
-    right: 20px;
-}
-
 .social-icons a {
     color: #ffffff;
     font-size: 1.5rem;

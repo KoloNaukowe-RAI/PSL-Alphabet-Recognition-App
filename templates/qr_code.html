@@ -14,15 +14,18 @@
   <link rel="stylesheet" href="{%static 'css/qr_code.css' %}">
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg">
-      <button class="openbtn" onclick="openNav()">&#9776; Menu</button>
-      <div class="navbar-brand-container">
-          <a class="navbar-brand" href="{% url 'home' %}" id="navbar-brand">Kalambury <i class="fas fa-american-sign-language-interpreting"></i></a>
-      </div>
-      <div class="lang-toggle">
-          <button class="btn lang-toggle-btn" onclick="toggleLanguage('pl')" title="Polski"><i class="fas fa-globe"></i> PL</button>
-          <button class="btn lang-toggle-btn" onclick="toggleLanguage('en')" title="English"><i class="fas fa-globe"></i> EN</button>
-      </div>
+   <!-- Navbar -->
+   <nav class="navbar navbar-expand-lg d-flex flex-row justify-content-between .align-content-md-end">
+    <div class="p-0">
+        <button class="openbtn" onclick="openNav()">&#9776; Menu</button>
+    </div>
+    <div class="p-2">
+        <a class="navbar-brand href="#" id="navbar-brand">Kalambury <i class="fas fa-american-sign-language-interpreting"></i></a>
+    </div>
+    <div class="social-icons p-0">
+        <a href="https://www.facebook.com/RobotykaAutomatykaInformatyka" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://www.linkedin.com/company/kn-rai/" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a>
+    </div>
   </nav>
 
   <!-- Side Navigation -->
