@@ -8,6 +8,8 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="{% static 'js/feedback.js' %}" async></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="stylesheet" href="{%static 'css/common.css'%}">
   <link rel="stylesheet" href="{% static 'css/feedback_thanks.css'%}">
@@ -34,5 +36,16 @@
           <a href="{% url 'home' %}" class="btn btn-primary">Go to Home</a>
       </div>
   </div>
+
+  <script>
+      function updateTheme() {
+            if (localStorage.getItem("theme") === 'light') {
+                document.body.classList.add('light-mode');
+            } else {
+                document.body.classList.remove('light-mode');
+            }
+        }
+        updateTheme();
+  </script>
 </body>
 </html>
