@@ -48,7 +48,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 0 20px;
+    padding: .5rem 1rem;
 }
 
 .navbar-brand-container {
@@ -61,6 +61,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-right: 0;
     text-align: center;
     color: #ffffff;
     font-size: 1.5rem;
@@ -171,4 +172,15 @@ body {
 }
 .lang-toggle button:hover {
     color: #00d4ff;
+}
+
+.social-icons a {
+    color: #ffffff;
+    font-size: 1.5rem;
+    margin: 0 10px;
+    transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+    color: rgba(33, 150, 243, 0.8);
 }
