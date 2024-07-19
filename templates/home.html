@@ -317,6 +317,10 @@
             document.getElementById('loading-screen').style.display = 'none';
         }
 
+        function updatePlayer() {
+            document.getElementById('player-name').value = playerName;
+        }
+
         document.getElementById('start-game-button').addEventListener('click', () => {
             playerName = localStorage.getItem('playerName');
             difficulty = localStorage.getItem('difficulty');
@@ -341,6 +345,7 @@
                 playerName = newPlayerName;
                 localStorage.setItem('playerName', playerName);
                 alert(`Player ${newPlayerName} added.`);
+                updatePlayer();
             }
         });
 
