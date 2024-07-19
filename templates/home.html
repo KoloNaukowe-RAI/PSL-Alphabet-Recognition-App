@@ -87,7 +87,7 @@
                     <form id="settings-form">
                         <div class="form-group">
                             <label for="player-name" id="player-name-label">Player Name</label>
-                            <input type="text" class="form-control" id="player-name" required maxlength="15">
+                            <input type="text" class="form-control" id="player-name" required maxlength="15" value="">
                         </div>
                         <div class="form-group">
                             <label for="duration" id="duration-label">Duration (mins)</label>
@@ -187,11 +187,18 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-        let playerName = '';
+        let plplayerName = '';
+        if (localStorage.getItem("playerName") === null) {
+            localStorage.setItem("playerName", '');
+        }
+            let playerName = localStorage.getItem("playerName")
+            document.getElementById('player-name').value = playerName
         let language = 'EN';
         let difficulty = 'easy';
         let theme = 'dark';
-
+        if (localStorage.getItem("theme") === null) {
+            localStorage.setItem("theme", theme);
+        }
         const translations = {
             'EN': {
                 'navbar-brand': 'Kalambury',
@@ -244,6 +251,7 @@
 
         document.getElementById('theme-select').addEventListener('change', (event) => {
             theme = event.target.value;
+            localStorage.setItem('theme', theme);
             updateTheme();
         });
 
@@ -273,7 +281,7 @@
         }
 
         function updateTheme() {
-            if (theme === 'light') {
+            if (localStorage.getItem("theme") === 'light') {
                 document.body.classList.add('light-mode');
             } else {
                 document.body.classList.remove('light-mode');
@@ -284,7 +292,7 @@
             playerName = document.getElementById('player-name').value;
             difficulty = document.getElementById('difficulty-select').value;
             theme = document.getElementById('theme-select').value;
-
+            updateTheme();
             if (playerName.length > 15) {
                 alert('Player name must be 15 characters or less.');
                 return;
