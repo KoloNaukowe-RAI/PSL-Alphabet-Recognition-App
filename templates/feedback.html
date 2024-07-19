@@ -9,170 +9,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="{% static 'signs.css' %}">
-    <style>
-        body {
-            background-color: #1f1f1f;
-            font-family: 'Roboto', sans-serif;
-            color: #ffffff;
-        }
-        .navbar {
-            background-color: #007bff;
-            padding: 10px;
-        }
-        .navbar-brand {
-            color: white;
-            font-size: 24px;
-        }
-        .lang-toggle {
-            display: flex;
-            justify-content: flex-end;
-            margin-right: 20px;
-        }
-        .lang-toggle button {
-            margin-left: 10px;
-            background-color: transparent;
-            border: none;
-            color: #ffffff;
-            cursor: pointer;
-        }
-        .lang-toggle button:hover {
-            color: #00d4ff;
-        }
-        .sidebar {
-            height: 100%;
-            width: 0;
-            position: fixed;
-            z-index: 1;
-            top: 0;
-            left: 0;
-            background-color: #111;
-            overflow-x: hidden;
-            transition: 0.5s;
-            padding-top: 60px;
-        }
-        .sidebar a {
-            padding: 8px 8px 8px 32px;
-            text-decoration: none;
-            font-size: 20px;
-            color: #ffffff;
-            display: block;
-            transition: 0.3s;
-        }
-        .sidebar a:hover {
-            color: #007bff;
-            background-color: #222;
-        }
-        .sidebar a.active {
-            color: #ffffff;
-            background-color: #111;
-        }
-        .sidebar .closebtn {
-            position: absolute;
-            top: 0;
-            right: 25px;
-            font-size: 36px;
-            margin-left: 50px;
-        }
-        .openbtn {
-            font-size: 20px;
-            cursor: pointer;
-            background-color: #007bff;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-        }
-        .openbtn:hover {
-            background-color: #0056b3;
-        }
-        .container {
-            max-width: 700px;
-            margin: 50px auto;
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 10px;
-            color: #333;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
-        }
-        .form-control {
-            background-color: #ffffff;
-            color: #333;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .form-control:focus {
-            background-color: #ffffff;
-            color: #333;
-            border: 1px solid #007bff;
-            box-shadow: none;
-        }
-        .btn-primary {
-            background-color: #007bff;
-            color: #ffffff;
-            border: 1px solid #007bff;
-            border-radius: 5px;
-        }
-        .btn-primary:hover {
-            background-color: #0056b3;
-            color: #ffffff;
-        }
-        .btn-primary:focus, .btn-primary.focus {
-            box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
-        }
-        .btn-block {
-            display: block;
-            width: 100%;
-            margin-top: 20px;
-        }
-        .header-section {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .header-section img {
-            max-width: 100%;
-            border-radius: 10px;
-            margin-bottom: 10px;
-        }
-        .form-section {
-            margin-top: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .radio-group {
-            display: flex;
-            justify-content: space-between;
-        }
-        @media (max-width: 768px) {
-            .navbar-brand {
-                font-size: 20px;
-            }
-            .sidebar a {
-                font-size: 18px;
-            }
-            .openbtn {
-                font-size: 18px;
-            }
-            .container {
-                padding: 15px;
-            }
-        }
-        @media (max-width: 576px) {
-            .navbar-brand {
-                font-size: 18px;
-            }
-            .sidebar a {
-                font-size: 16px;
-            }
-            .openbtn {
-                font-size: 16px;
-                padding: 8px 12px;
-            }
-            .container {
-                padding: 10px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="{%static 'css/common.css'%}">
+    <link rel="stylesheet" href="{% static 'css/feedback.css' %}">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg">
@@ -189,11 +27,12 @@
     <!-- Side Navigation -->
     <div id="mySidebar" class="sidebar">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="{% url 'home' %}" class="sidebar-link" data-translate-key="home"><i class="fas fa-home icon"></i><span class="link-text">Home</span></a>
-        <a href="{% url 'signs' %}" class="sidebar-link" data-translate-key="signs"><i class="fas fa-american-sign-language-interpreting icon"></i><span class="link-text">Signs</span></a>
-        <a href="#" class="sidebar-link" data-translate-key="statistics"><i class="fas fa-chart-line icon"></i><span class="link-text">Statistics</span></a>
-        <a href="{% url 'feedback' %}" class="sidebar-link active" data-translate-key="feedback"><i class="fas fa-comments icon"></i><span class="link-text">Feedback</span></a>
-        <a href="#" class="sidebar-link" data-translate-key="help"><i class="fas fa-question-circle icon"></i><span class="link-text">Help</span></a>
+        <a href="../"><i class="fas fa-home icon"></i>Home</a>
+        <a href="signs/" class="active"><i class="fas fa-american-sign-language-interpreting"></i>Signs</a>
+        <a href="../qr_code/"><i class="fas fa-qrcode icon"></i>QR Code</a>
+        <a href="#" data-toggle="modal" data-target="#settingsModal"><i class="fas fa-cog icon"></i>Settings</a>
+        <a href="#"><i class="fas fa-chart-line icon"></i>Statistics</a>
+        <a href="../feedback/"><i class="fas fa-comments icon"></i>Feedback</a>
     </div>
 
     <div class="container">

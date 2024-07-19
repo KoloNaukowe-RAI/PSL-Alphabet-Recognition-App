@@ -1,0 +1,33 @@
+.change_color{
+    background-color: #0d6efd !important;
+    border-radius: 25px;
+}
+
+@media (max-width: @screen-xs) {
+    .change_color{font-size: 10px;}
+}
+
+@media (max-width: @screen-sm) {
+    .change_color{font-size: 20px;}
+}
+
+@media only screen and (min-width: 768px)
+{
+    .change_color{font-size: 40px;}
+}
+.row > .text-center > .change_color {
+    transition: transform .25s, background .25s;
+  }
+.row > .text-center:hover > .change_color  {
+    transform: scale(1.2);
+    background-color: #0f418d !important;
+    position: relative;
+    z-index: 1;
+    cursor: pointer
+  }
+
+.img-fluid{
+    height:auto;
+    max-width: 100%;
+    min-width: 40px;
+}

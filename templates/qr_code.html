@@ -8,119 +8,10 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
-  <script src="{% static 'signs.js' %}" async></script>
+  <script src="{% static 'js/signs.js' %}" async></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <link rel="stylesheet" href="{% static 'signs.css' %}">
-  <style>
-      body {
-          background-color: #1f1f1f;
-          font-family: 'Roboto', sans-serif;
-          color: #ffffff;
-      }
-      .navbar {
-          background-color: #007bff;
-          padding: 10px;
-      }
-      .navbar-brand {
-          color: white;
-          font-size: 24px;
-      }
-      .lang-toggle {
-          display: flex;
-          justify-content: flex-end;
-          margin-right: 20px;
-      }
-      .lang-toggle button {
-          margin-left: 10px;
-          background-color: transparent;
-          border: none;
-          color: #ffffff;
-          cursor: pointer;
-      }
-      .lang-toggle button:hover {
-          color: #ffeb3b;
-      }
-      .sidebar {
-          height: 100%;
-          width: 0;
-          position: fixed;
-          z-index: 1;
-          top: 0;
-          left: 0;
-          background-color: #111;
-          overflow-x: hidden;
-          transition: 0.5s;
-          padding-top: 60px;
-      }
-      .sidebar a {
-          padding: 8px 8px 8px 32px;
-          text-decoration: none;
-          font-size: 20px;
-          color: #ffffff;
-          display: block;
-          transition: 0.3s;
-      }
-      .sidebar a:hover {
-          color: #007bff;
-          background-color: #111;
-      }
-      .sidebar a.active {
-          color: #ffffff;
-          background-color: #007bff;
-      }
-      .sidebar .closebtn {
-          position: absolute;
-          top: 0;
-          right: 25px;
-          font-size: 36px;
-          margin-left: 50px;
-      }
-      .openbtn {
-          font-size: 20px;
-          cursor: pointer;
-          background-color: #007bff;
-          color: white;
-          padding: 10px 15px;
-          border: none;
-      }
-      .openbtn:hover {
-          background-color: #0056b3;
-      }
-      .container {
-          max-width: 600px;
-          margin: 50px auto;
-          background-color: #222;
-          padding: 30px;
-          border-radius: 10px;
-          text-align: center;
-          box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
-      }
-      .container:hover {
-          background-color: #2a2a2a;
-          transition: background-color 0.3s ease;
-      }
-      .btn-primary {
-          background-color: #007bff;
-          color: #ffffff;
-          border: 1px solid #007bff;
-          border-radius: 5px;
-      }
-      .btn-primary:hover {
-          background-color: #0056b3;
-          color: #ffffff;
-      }
-      .btn-block {
-          display: block;
-          width: 100%;
-          margin-top: 20px;
-      }
-      .img-fluid {
-          max-width: 100%;
-          height: auto;
-          border-radius: 10px;
-          margin-bottom: 20px;
-      }
-  </style>
+  <link rel="stylesheet" href="{%static 'css/common.css'%}"> 
+  <link rel="stylesheet" href="{%static 'css/qr_code.css' %}">
 </head>
 <body>
   <nav class="navbar navbar-expand-lg">
@@ -136,11 +27,13 @@
 
   <!-- Side Navigation -->
   <div id="mySidebar" class="sidebar">
-      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-      <a href="{% url 'home' %}" class="sidebar-link" data-translate-key="home"><i class="fas fa-home icon"></i><span class="link-text">Home</span></a>
-      <a href="{% url 'signs' %}" class="sidebar-link" data-translate-key="signs"><i class="fas fa-american-sign-language-interpreting icon"></i><span class="link-text">Signs</span></a>
-      <a href="#" class="sidebar-link" data-translate-key="statistics"><i class="fas fa-chart-line icon"></i><span class="link-text">Statistics</span></a>
-      <a href="#" class="sidebar-link" data-translate-key="help"><i class="fas fa-question-circle icon"></i><span class="link-text">Help</span></a>
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="../"><i class="fas fa-home icon"></i>Home</a>
+    <a href="signs/" class="active"><i class="fas fa-american-sign-language-interpreting"></i>Signs</a>
+    <a href="../qr_code/"><i class="fas fa-qrcode icon"></i>QR Code</a>
+    <a href="#" data-toggle="modal" data-target="#settingsModal"><i class="fas fa-cog icon"></i>Settings</a>
+    <a href="#"><i class="fas fa-chart-line icon"></i>Statistics</a>
+    <a href="../feedback/"><i class="fas fa-comments icon"></i>Feedback</a>
   </div>
 
   <div class="container">
