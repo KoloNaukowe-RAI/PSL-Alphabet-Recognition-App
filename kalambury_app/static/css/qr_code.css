@@ -1,0 +1,34 @@
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    background-color: #222;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+}
+.container:hover {
+    background-color: #2a2a2a;
+    transition: background-color 0.3s ease;
+}
+.btn-primary {
+    background-color: #007bff;
+    color: #ffffff;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+}
+.btn-primary:hover {
+    background-color: #0056b3;
+    color: #ffffff;
+}
+.btn-block {
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+}
+.img-fluid {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}

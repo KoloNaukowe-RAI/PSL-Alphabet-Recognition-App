@@ -1,0 +1,33 @@
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    background-color: #007bff;
+    padding: 20px;
+    border-radius: 10px;
+}
+.btn-primary {
+    background-color: #ffffff;
+    color: #007bff;
+    border: 1px solid #007bff;
+}
+.btn-primary:hover {
+    background-color: #e6e6e6;
+    color: #007bff;
+}
+h1 {
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+p {
+    text-align: center;
+    font-size: 18px;
+}
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+    }
+    h1 {
+        font-size: 28px;
+    }
+}
