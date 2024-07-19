@@ -4,56 +4,20 @@ import cv2
 import mediapipe as mp
 import os
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse, StreamingHttpResponse
 from django.views import View
-from .camera import VideoCamera
 from django.conf import settings
+from django.core.cache import cache
+from django.urls import reverse
+from .models import GameSession, Feedback
+from .forms import FeedbackForm
+from .camera import VideoCamera
 import qrcode
 from io import BytesIO
 import base64
-from django.views.generic.edit import FormView
-from django.shortcuts import render, redirect
-from django.urls import reverse
-from .forms import FeedbackForm
-from django.core.cache import cache
 
-
-def feedback_view(request):
-    if request.method == 'POST':
-        form = FeedbackForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect(reverse('feedback_thanks'))
-    else:
-        form = FeedbackForm()
-    return render(request, 'feedback.html', {'form': form})
-
-
-def feedback_thanks_view(request):
-    return render(request, 'feedback_thanks.html')
-
-
-class QRCodeView(View):
-    def get(self, request):
-        qr_text = "Twórcy dziękują Ci za grę w kalambury"
-        qr = qrcode.QRCode(
-            version=1,
-            error_correction=qrcode.constants.ERROR_CORRECT_L,
-            box_size=10,
-            border=4,
-        )
-        qr.add_data(qr_text)
-        qr.make(fit=True)
-        img = qr.make_image(fill='black', back_color='white')
-
-        buffer = BytesIO()
-        img.save(buffer, format="PNG")
-        buffer.seek(0)
-        img_str = base64.b64encode(buffer.getvalue()).decode()
-
-        return render(request, 'qr_code.html', {'qr_code': img_str})
-
+mp_hands = mp.solutions.hands.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5)
 
 dataset = {
     "Zwierzęta": ["delfin", "dzik", "koń", "kot", "krowa", "małpa", "owca", "pies", "ptak", "ryba", "słoń", "zebra"],
@@ -62,24 +26,25 @@ dataset = {
     "Zawody": ["fryzjer", "kelner", "lekarz"]
 }
 
-mp_hands = mp.solutions.hands.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5)
-
-
 class HomeView(View):
     def get(self, request):
         return render(request, 'home.html')
-
 
 class SignsView(View):
     def get(self, request):
         return render(request, 'signs.html')
 
-
 class StartGameView(View):
     def get(self, request):
+        player_name = request.GET.get('player_name', 'Unknown')
         difficulty = request.GET.get('difficulty', 'easy')
         category, word, image_url = self.select_random_category_word_and_image(difficulty)
         cache.set('random_word', word)
+        cache.set('player_name', player_name)
+
+        # Save game session
+        GameSession.objects.create(player_name=player_name, word=word)
+
         return JsonResponse({'category': category, 'word': word, 'image_url': image_url})
 
     def select_random_category_word_and_image(self, difficulty):
@@ -107,6 +72,56 @@ class StartGameView(View):
         image_path = os.path.join(settings.STATIC_URL, 'images_to_display', f'{word}.png')
         return image_path
 
+class ResetGameView(View):
+    def get(self, request):
+        player_name = cache.get('player_name', 'Unknown')
+        difficulty = request.GET.get('difficulty', 'easy')
+        category, word, image_url = self.select_random_category_word_and_image(difficulty)
+        cache.set('random_word', word)
+
+        # Update the game session with a new word
+        game_session = GameSession.objects.filter(player_name=player_name).last()
+        if game_session:
+            game_session.word = word
+            game_session.save()
+
+        # Clear buffer
+        self.clear_buffer()
+
+        return JsonResponse({'category': category, 'word': word, 'image_url': image_url})
+
+    def select_random_category_word_and_image(self, difficulty):
+        filtered_dataset = self.filter_by_difficulty(difficulty)
+        category = random.choice(list(filtered_dataset.keys()))
+        word = random.choice(filtered_dataset[category])
+        image_url = self.get_image_url(word)
+        return category, word, image_url
+
+    def filter_by_difficulty(self, difficulty):
+        if difficulty == 'easy':
+            max_length = 5
+        elif difficulty == 'medium':
+            max_length = 8
+        else:
+            max_length = 12
+
+        filtered_dataset = {
+            category: [word for word in words if len(word) <= max_length]
+            for category, words in dataset.items()
+        }
+        return {k: v for k, v in filtered_dataset.items() if v}
+
+    def get_image_url(self, word):
+        image_path = os.path.join(settings.STATIC_URL, 'images_to_display', f'{word}.png')
+        return image_path
+
+    def clear_buffer(self):
+        cache.set('handedness', '')
+        cache.set('random_word', '')
+        cache.set('shown_letters', [])
+        cache.set('data', [])
+        cache.set('data_doubled', [])
+        cache.set('letters_to_show', [])
 
 class ProcessVideoFrameView(View):
     def post(self, request):
@@ -132,7 +147,6 @@ class ProcessVideoFrameView(View):
                     frame, hand_landmarks, mp.solutions.hands.HAND_CONNECTIONS)
                 landmarks.append([[landmark.x, landmark.y, landmark.z] for landmark in hand_landmarks.landmark])
         return frame, landmarks
-
 
 class LiveCameraFeedView(View):
     def __init__(self, *args, **kwargs):
@@ -260,3 +274,37 @@ class LiveCameraFeedView(View):
                     break
 
         return frame
+
+def feedback_view(request):
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('feedback_thanks'))
+    else:
+        form = FeedbackForm()
+    return render(request, 'feedback.html', {'form': form})
+
+def feedback_thanks_view(request):
+    return render(request, 'feedback_thanks.html')
+
+class QRCodeView(View):
+    def get(self, request):
+        qr_text = "Twórcy dziękują Ci za grę w kalambury"
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(qr_text)
+        qr.make(fit=True)
+        img = qr.make_image(fill='black', back_color='white')
+
+        buffer = BytesIO()
+        img.save(buffer, format="PNG")
+        buffer.seek(0)
+        img_str = base64.b64encode(buffer.getvalue()).decode()
+
+        return render(request, 'qr_code.html', {'qr_code': img_str})
+
