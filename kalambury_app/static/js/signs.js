@@ -28,4 +28,6 @@ function updateTheme() {
     }
 }
 
-updateTheme();
+document.addEventListener('DOMContentLoaded', () => {
+    updateTheme();
+});

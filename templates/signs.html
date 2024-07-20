@@ -34,13 +34,14 @@
 
 <!-- Side Navigation -->
 <div id="mySidebar" class="sidebar">
-    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-    <a href="../"><i class="fas fa-home icon"></i>Home</a>
-    <a href="../signs" class="active"><i class="fas fa-american-sign-language-interpreting icon"></i>Signs</a>
-    <a href="../qr_code/"><i class="fas fa-qrcode icon"></i>QR Code</a>
-    <a href="#"><i class="fas fa-chart-line icon"></i>Statistics</a>
-    <a href="../feedback/"><i class="fas fa-comments icon"></i>Feedback</a>
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <a href="../"><i class="fas fa-home icon"></i><b data-i18n="home-button-sidebar"></b></a>
+  <a href="../signs/" class="active"><i class="fas fa-american-sign-language-interpreting icon"></i><b data-i18n="signs-button-sidebar"></b></a>
+  <a href="../qr_code/"><i class="fas fa-qrcode icon"></i><b data-i18n="qr-code-button-sidebar"></b></a>
+  <a href="#"><i class="fas fa-chart-line icon"></i><b data-i18n="statistics-button-sidebar"></b></a>
+  <a href="../feedback/"><i class="fas fa-comments icon"></i><b data-i18n="feedback-button-sidebar"></b></a>
 </div>
+
 
   <div class="d-flex justify-content-center my-3" id = "heder"><h1>Poznaj poszczególne znaki</h1></div>
   <div class="container-lg" >
@@ -279,6 +280,14 @@
     <button type="button" class="btn btn-primary btn-lg btn-block my-3" id = "goBackButton" onclick="scrollUp()">Powrót na górę <i class="fa-sharp fa-solid fa-chevrons-up"></i></button>
   </div>
   </div>
+
+  <script>
+
+    var json_translation_EN = "{% static "json_translations/EN.json" %}"
+    var json_translation_PL = "{% static "json_translations/PL.json" %}"
+
+  </script>
+  <script src="{% static 'js\translation.js'%}"></script>
 
 </body>
 </html>

@@ -2,15 +2,23 @@ let plplayerName = '';
 if (localStorage.getItem("playerName") === null) {
     localStorage.setItem("playerName", '');
 }
-let playerName = localStorage.getItem("playerName")
+playerName = localStorage.getItem("playerName")
 let language = localStorage.getItem("language") || 'EN';
-document.getElementById('player-name').value = playerName
-document.getElementById('language-select').value = language
-let difficulty = 'easy';
+
 let theme = 'dark';
 if (localStorage.getItem("theme") === null) {
     localStorage.setItem("theme", theme);
 }
+theme = localStorage.getItem("theme")
+let difficulty = 'easy';
+if (localStorage.getItem("difficulty") === null) {
+    localStorage.setItem("difficulty", difficulty);
+}
+difficulty = localStorage.getItem("difficulty")
+document.getElementById('player-name').value = playerName
+document.getElementById('language-select').value = language
+document.getElementById('difficulty-select').value = difficulty
+document.getElementById('theme-select').value = theme
 
 document.getElementById('language-select').addEventListener('change', (event) => {
     language = event.target.value;
@@ -20,7 +28,7 @@ document.getElementById('language-select').addEventListener('change', (event) =>
 document.getElementById('theme-select').addEventListener('change', (event) => {
     theme = event.target.value;
     localStorage.setItem('theme', theme);
-    updateTheme();
+
 });
 
 function updateTheme() {
@@ -216,12 +224,6 @@ function prevStep(step) {
         element.classList.add('hidden');
     });
     document.getElementById(`tutorial-step-${step}`).classList.remove('hidden');
-}
-
-function toggleTranslation(step) {
-    const currentText = document.getElementById(`tutorial-step-${step}-text`).textContent;
-    const translatedText = translations[language][`tutorial-step-${step}-text`];
-    document.getElementById(`tutorial-step-${step}-text`).textContent = currentText === translatedText ? translations['PL'][`tutorial-step-${step}-text`] : translatedText;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
