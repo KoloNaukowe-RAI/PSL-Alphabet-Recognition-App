@@ -25,7 +25,7 @@
             <button class="openbtn" onclick="openNav()">&#9776; Menu</button>
         </div>
         <div class="p-2">
-            <a class="navbar-brand" href="#" id="navbar-brand">Kalambury <i class="fas fa-american-sign-language-interpreting"></i></a>
+            <a class="navbar-brand" href="#" id="navbar-brand">Kalambury<i class="fas fa-american-sign-language-interpreting"></i></a>
         </div>
         <div class="social-icons p-0">
             <a href="https://www.facebook.com/RobotykaAutomatykaInformatyka" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
@@ -36,12 +36,12 @@
     <!-- Side Navigation -->
     <div id="mySidebar" class="sidebar">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="#" class="active"><i class="fas fa-home icon"></i>Home</a>
-        <a href="signs/"><i class="fas fa-american-sign-language-interpreting icon"></i>Signs</a>
-        <a href="qr_code/"><i class="fas fa-qrcode icon"></i>QR Code</a>
-        <a href="#" data-toggle="modal" data-target="#settingsModal"><i class="fas fa-cog icon"></i>Settings</a>
-        <a href="#"><i class="fas fa-chart-line icon"></i>Statistics</a>
-        <a href="feedback/"><i class="fas fa-comments icon"></i>Feedback</a>
+        <a href="#" class="active"><i class="fas fa-home icon"></i><b data-i18n="home-button-sidebar"></b></a>
+        <a href="signs/"><i class="fas fa-american-sign-language-interpreting icon"></i><b data-i18n="signs-button-sidebar"></b></a>
+        <a href="qr_code/"><i class="fas fa-qrcode icon"></i><b data-i18n="qr-code-button-sidebar"></b></a>
+        <a href="#" data-toggle="modal" data-target="#settingsModal"><i class="fas fa-cog icon"></i><b data-i18n="settings-button-sidebar"></b></a>
+        <a href="#"><i class="fas fa-chart-line icon"></i><b data-i18n="statistics-button-sidebar"></b></a>
+        <a href="feedback/"><i class="fas fa-comments icon"></i><b data-i18n="feedback-button-sidebar"></b></a>
     </div>
 
     <!-- Main Menu -->
@@ -62,9 +62,9 @@
         </div>
         <div class="timer" id="timer"></div>
         <div class="player-name-display" id="player-name-display"></div>
-        <button class="btn custom-button" id="back-button">Back to Menu</button>
-        <button class="btn custom-button" id="reset-button">Reset Game</button>
-        <button class="btn custom-button" id="exit-button">Exit</button>
+        <button class="btn custom-button" id="back-button" data-i18n = "back-button"></button>
+        <button class="btn custom-button" id="reset-button"  data-i18n = "reset-button"></button>
+        <button class="btn custom-button" id="exit-button"  data-i18n = "exit-button"></button>
         <div class="star-rating" id="star-rating">
             <span class="star" data-value="1">&#9733;</span>
             <span class="star" data-value="2">&#9733;</span>
@@ -79,7 +79,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="settingsModalLabel">Settings</h5>
+                    <h5 class="modal-title" id="settingsModalLabel" data-i18n="settingsModalLabel"></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -87,40 +87,40 @@
                 <div class="modal-body">
                     <form id="settings-form">
                         <div class="form-group">
-                            <label for="player-name" id="player-name-label">Player Name</label>
+                            <label for="player-name" id="player-name-label" data-i18n="player-name-label"></label>
                             <input type="text" class="form-control" id="player-name" required maxlength="15" value="">
                         </div>
                         <div class="form-group">
-                            <label for="duration" id="duration-label">Duration (mins)</label>
+                            <label for="duration" id="duration-label" data-i18n="duration-label"></label>
                             <input type="number" class="form-control" id="duration" value="12" min="1">
                         </div>
                         <div class="form-group">
-                            <label for="language" id="language-label">Language</label>
+                            <label for="language" id="language-label" data-i18n="language-label"></label>
                             <select class="form-control" id="language-select">
-                                <option value="EN">English</option>
-                                <option value="PL">Polish</option>
+                                <option value="EN" data-i18n="english-select"></option>
+                                <option value="PL" data-i18n="polish-select"></option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="difficulty-select" id="difficulty-label">Difficulty</label>
+                            <label for="difficulty-select" id="difficulty-label" data-i18n="difficulty-label"></label>
                             <select class="form-control" id="difficulty-select">
-                                <option value="easy">Easy</option>
-                                <option value="medium">Medium</option>
-                                <option value="hard">Hard</option>
+                                <option value="easy" data-i18n="diff-easy"></option>
+                                <option value="medium" data-i18n="diff-med"></option>
+                                <option value="hard" data-i18n="diff-hard"></option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="theme-select" id="theme-label">Theme</label>
+                            <label for="theme-select" id="theme-label" data-i18n="theme-label"></label>
                             <select class="form-control" id="theme-select">
-                                <option value="dark">Dark</option>
-                                <option value="light">Light</option>
+                                <option value="dark" data-i18n="theme-dark"></option>
+                                <option value="light" data-i18n="theme-light"></option>
                             </select>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn custom-button" data-dismiss="modal" id="close-button">Close</button>
-                    <button type="button" class="btn custom-button" id="save-settings-button">Save settings</button>
+                    <button type="button" class="btn custom-button" data-dismiss="modal" id="close-button" data-i18n="close-button"></button>
+                    <button type="button" class="btn custom-button" id="save-settings-button" data-i18n="save-settings-button"></button>
                 </div>
             </div>
         </div>
@@ -131,7 +131,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="tutorialModalLabel">Game Tutorial</h5>
+                    <h5 class="modal-title" id="tutorialModalLabel" data-i18n="tutorial-modal-label"></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -140,42 +140,38 @@
                     <div id="tutorial-steps">
                         <!-- Step 1 -->
                         <div class="tutorial-step" id="tutorial-step-1">
-                            <h2><i class="fas fa-info-circle"></i> Welcome to Kalambury!</h2>
-                            <p id="tutorial-step-1-text">This tutorial will guide you through the basics of the game.</p>
+                            <h2  data-i18n="tutorial-step-1-label"><i class="fas fa-info-circle"></i></h2>
+                            <p id="tutorial-step-1-text" data-i18n="tutorial-step-1-text"></p>
                             <div>
-                                <button class="btn custom-button tutorial-button" onclick="prevStep(1)" disabled>Previous</button>
-                                <button class="btn custom-button tutorial-button" onclick="toggleTranslation(1)">Translate</button>
-                                <button class="btn custom-button tutorial-button" onclick="nextStep(2)">Next</button>
+                                <button class="btn custom-button tutorial-button" data-i18n="tutorial-previous-button" onclick="prevStep(1)" disabled></button>
+                                <button class="btn custom-button tutorial-button" data-i18n="tutorial-next-button" onclick="nextStep(2)"></button>
                             </div>
                         </div>
                         <!-- Step 2 -->
                         <div class="tutorial-step hidden" id="tutorial-step-2">
-                            <h2><i class="fas fa-cog"></i> Step 1: Setting up the game</h2>
-                            <p id="tutorial-step-2-text">Enter your player name and choose the game settings.</p>
+                            <h2 data-i18n="tutorial-step-2-label"><i class="fas fa-cog"></i></h2>
+                            <p id="tutorial-step-2-text" data-i18n="tutorial-step-2-text"></p>
                             <div>
-                                <button class="btn custom-button tutorial-button" onclick="prevStep(1)">Previous</button>
-                                <button class="btn custom-button tutorial-button" onclick="toggleTranslation(2)">Translate</button>
-                                <button class="btn custom-button tutorial-button" onclick="nextStep(3)">Next</button>
+                                <button class="btn custom-button tutorial-button" data-i18n="tutorial-previous-button" onclick="prevStep(1)"></button>
+                                <button class="btn custom-button tutorial-button" data-i18n="tutorial-next-button" onclick="nextStep(3)">/button>
                             </div>
                         </div>
                         <!-- Step 3 -->
                         <div class="tutorial-step hidden" id="tutorial-step-3">
-                            <h2><i class="fas fa-play-circle"></i> Step 2: Starting the game</h2>
-                            <p id="tutorial-step-3-text">Click 'Start Game' to begin.</p>
+                            <h2 data-i18n = "tutorial-step-3-label"><i class="fas fa-play-circle"></i></h2>
+                            <p id="tutorial-step-3-text" data-i18n="tutorial-step-3-text"></p>
                             <div>
-                                <button class="btn custom-button tutorial-button" onclick="prevStep(2)">Previous</button>
-                                <button class="btn custom-button tutorial-button" onclick="toggleTranslation(3)">Translate</button>
-                                <button class="btn custom-button tutorial-button" onclick="nextStep(4)">Next</button>
+                                <button class="btn custom-button tutorial-button" data-i18n="tutorial-previous-button" onclick="prevStep(2)"></button>
+                                <button class="btn custom-button tutorial-button" data-i18n="tutorial-next-button" onclick="nextStep(4)"></button>
                             </div>
                         </div>
                         <!-- Step 4 -->
                         <div class="tutorial-step hidden" id="tutorial-step-4">
-                            <h2><i class="fas fa-gamepad"></i> Step 3: Playing the game</h2>
-                            <p id="tutorial-step-4-text">Follow the instructions and have fun!</p>
+                            <h2 data-i18n = "tutorial-step-4-label"><i class="fas fa-gamepad"></i></h2>
+                            <p id="tutorial-step-4-text"  data-i18n="tutorial-step-4-text"></p>
                             <div>
-                                <button class="btn custom-button tutorial-button" onclick="prevStep(3)">Previous</button>
-                                <button class="btn custom-button tutorial-button" onclick="toggleTranslation(4)">Translate</button>
-                                <button class="btn custom-button tutorial-button" data-dismiss="modal">Finish</button>
+                                <button class="btn custom-button tutorial-button" data-i18n="tutorial-previous-button" onclick="prevStep(3)"></button>
+                                <button class="btn custom-button tutorial-button" data-i18n="tutorial-finish-button" data-dismiss="modal"></button>
                             </div>
                         </div>
                     </div>

@@ -5,5 +5,13 @@ function updateTheme() {
         document.body.classList.remove('light-mode-qr');
     }
 }
+function openNav() {
+    document.getElementById("mySidebar").style.width = "250px";
+}
 
-updateTheme();
+function closeNav() {
+    document.getElementById("mySidebar").style.width = "0";
+}
+document.addEventListener('DOMContentLoaded', () => {
+    updateTheme();
+});
