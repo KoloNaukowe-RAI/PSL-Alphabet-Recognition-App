@@ -1,0 +1,22 @@
+{
+    "navbar-brand": "Kalambury",
+    "settings-button": "Ustawienia",
+    "start-game-button": "Rozpocznij Grę",
+    "add-player-button": "Dodaj Gracza",
+    "tutorial-button": "Samouczek",
+    "back-button": "Powrót do Menu",
+    "reset-button": "Zresetuj Grę",
+    "exit-button": "Wyjście",
+    "settingsModalLabel": "Ustawienia",
+    "player-name-label": "Nazwa Gracza",
+    "duration-label": "Czas Trwania (minuty)",
+    "language-label": "Język",
+    "difficulty-label": "Poziom Trudności",
+    "theme-label": "Motyw",
+    "close-button": "Zamknij",
+    "save-settings-button": "Zapisz ustawienia",
+    "tutorial-step-1-text": "Ten samouczek poprowadzi Cię przez podstawy gry.",
+    "tutorial-step-2-text": "Wprowadź nazwę gracza i wybierz ustawienia gry.",
+    "tutorial-step-3-text": "Kliknij 'Rozpocznij Grę', aby rozpocząć.",
+    "tutorial-step-4-text": "Postępuj zgodnie z instrukcjami i baw się dobrze!"
+}

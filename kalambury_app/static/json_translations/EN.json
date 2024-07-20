@@ -1,0 +1,22 @@
+{
+    "navbar-brand": "Kalambury",
+    "settings-button": "Settings",
+    "start-game-button": "Start Game",
+    "add-player-button": "Add Player",
+    "tutorial-button": "Tutorial",
+    "back-button": "Back to Menu",
+    "reset-button": "Reset Game",
+    "exit-button": "Exit",
+    "settingsModalLabel": "Settings",
+    "player-name-label": "Player Name",
+    "duration-label": "Duration (mins)",
+    "language-label": "Language",
+    "difficulty-label": "Difficulty",
+    "theme-label": "Theme",
+    "close-button": "Close",
+    "save-settings-button": "Save settings",
+    "tutorial-step-1-text": "This tutorial will guide you through the basics of the game.",
+    "tutorial-step-2-text": "Enter your player name and choose the game settings.",
+    "tutorial-step-3-text": "Click 'Start Game' to begin.",
+    "tutorial-step-4-text": "Follow the instructions and have fun!"
+}
