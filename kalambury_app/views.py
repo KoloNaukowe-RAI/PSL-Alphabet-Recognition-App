@@ -3,6 +3,7 @@ import numpy as np
 import cv2
 import mediapipe as mp
 import os
+import logging
 
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, StreamingHttpResponse
@@ -18,6 +19,9 @@ from io import BytesIO
 import base64
 
 mp_hands = mp.solutions.hands.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5)
+
+# Konfiguracja loggera
+logger = logging.getLogger(__name__)
 
 dataset = {
     "Zwierzęta": ["delfin", "dzik", "koń", "kot", "krowa", "małpa", "owca", "pies", "ptak", "ryba", "słoń", "zebra"],
@@ -41,11 +45,12 @@ class StartGameView(View):
         category, word, image_url = self.select_random_category_word_and_image(difficulty)
         cache.set('random_word', word)
         cache.set('player_name', player_name)
+        score = cache.get(f'score_{player_name}', 0)
 
         # Save game session
         GameSession.objects.create(player_name=player_name, word=word)
 
-        return JsonResponse({'category': category, 'word': word, 'image_url': image_url})
+        return JsonResponse({'category': category, 'word': word, 'image_url': image_url, 'score': score})
 
     def select_random_category_word_and_image(self, difficulty):
         filtered_dataset = self.filter_by_difficulty(difficulty)
@@ -88,7 +93,9 @@ class ResetGameView(View):
         # Clear buffer
         self.clear_buffer()
 
-        return JsonResponse({'category': category, 'word': word, 'image_url': image_url})
+        score = cache.get(f'score_{player_name}', 0)
+
+        return JsonResponse({'category': category, 'word': word, 'image_url': image_url, 'score': score})
 
     def select_random_category_word_and_image(self, difficulty):
         filtered_dataset = self.filter_by_difficulty(difficulty)
@@ -159,7 +166,6 @@ class LiveCameraFeedView(View):
         self.letters_to_show = []
         self.word_to_signs()
         self.handedness = cache.get('handedness')
-        self.clear_buffer()
         self.label_dict = cache.get('labels')
 
     def clear_buffer(self):
@@ -173,6 +179,8 @@ class LiveCameraFeedView(View):
 
     def word_to_signs(self):
         word = self.random_word
+        if word is None:
+            return
         word_len = len(word)
         i = 0
         while i < word_len:
@@ -203,14 +211,13 @@ class LiveCameraFeedView(View):
             else:
                 self.letters_to_show.append(word[i])
             i += 1
-        print(self.letters_to_show)
 
     def get(self, request):
         try:
             return StreamingHttpResponse(self.generate_frames(VideoCamera()),
                                          content_type="multipart/x-mixed-replace; boundary=frame")
         except Exception as e:
-            print(e)
+            print("Error in LiveCameraFeedView.get:", e)
             return JsonResponse({'error': 'Streaming error'}, status=500)
 
     def generate_frames(self, camera):
@@ -253,10 +260,12 @@ class LiveCameraFeedView(View):
             self.data_doubled = self.data_doubled[-60:]
             pred_double = self.model.predict(np.expand_dims(self.data_doubled, axis=0))[0]
             for index in np.argwhere(pred_double > 0.33):
-                print("prediction: ", list(self.label_dict.keys())[index[0]])
                 if list(self.label_dict.keys())[index[0]] == self.letters_to_show[len(self.shown_letters)]:
                     self.shown_letters.append(list(self.label_dict.keys())[index[0]])
-                    print("correct prediction: ", self.shown_letters)
+                    player_name = cache.get('player_name', 'Unknown')
+                    score = cache.get(f'score_{player_name}', 0)
+                    score += 1  # 1 point for each correctly shown letter
+                    cache.set(f'score_{player_name}', score)
                     self.data_doubled = []
                     self.data = []
                     break
@@ -265,15 +274,31 @@ class LiveCameraFeedView(View):
             self.data = self.data[-60:]
             pred = self.model.predict(np.expand_dims(self.data, axis=0))[0]
             for index in np.argwhere(pred > 0.33):
-                print("prediction: ", list(self.label_dict.keys())[index[0]])
                 if list(self.label_dict.keys())[index[0]] == self.letters_to_show[len(self.shown_letters)]:
                     self.shown_letters.append(list(self.label_dict.keys())[index[0]])
-                    print("correct prediction: ", self.shown_letters)
+                    player_name = cache.get('player_name', 'Unknown')
+                    score = cache.get(f'score_{player_name}', 0)
+                    score += 1  # 1 point for each correctly shown letter
+                    cache.set(f'score_{player_name}', score)
                     self.data_doubled = []
                     self.data = []
                     break
 
+        if len(self.shown_letters) == len(self.letters_to_show):
+            player_name = cache.get('player_name', 'Unknown')
+            score = cache.get(f'score_{player_name}', 0)
+            score += 10  # Bonus points for correctly showing the whole word
+            cache.set(f'score_{player_name}', score)
+
         return frame
+
+class LiveFeedLettersView(View):
+    def get(self, request):
+        update_letters = request.GET.get('update_letters', 'false').lower() == 'true'
+        if update_letters:
+            shown_letters = cache.get('shown_letters', [])
+            return JsonResponse({'shown_letters': shown_letters})
+        return JsonResponse({'error': 'Invalid request'}, status=400)
 
 def feedback_view(request):
     if request.method == 'POST':
@@ -307,4 +332,3 @@ class QRCodeView(View):
         img_str = base64.b64encode(buffer.getvalue()).decode()
 
         return render(request, 'qr_code.html', {'qr_code': img_str})
-
