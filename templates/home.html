@@ -47,9 +47,9 @@
     <!-- Main Menu -->
     <div id="main-menu" class="container text-center center">
         <div class="login-box">
-            <button class="btn custom-button" id="start-game-button" data-i18n = "start-game-button"></button>
-            <button class="btn custom-button" id="add-player-button" data-i18n = "add-player-button"></button>
-            <button class="btn custom-button" id="tutorial-button" data-i18n = "tutorial-button" ></button>
+            <button class="btn custom-button" id="start-game-button" data-i18n="start-game-button"></button>
+            <button class="btn custom-button" id="add-player-button" data-i18n="add-player-button"></button>
+            <button class="btn custom-button" id="tutorial-button" data-i18n="tutorial-button"></button>
         </div>
     </div>
 
@@ -62,9 +62,11 @@
         </div>
         <div class="timer" id="timer"></div>
         <div class="player-name-display" id="player-name-display"></div>
-        <button class="btn custom-button" id="back-button" data-i18n = "back-button"></button>
-        <button class="btn custom-button" id="reset-button"  data-i18n = "reset-button"></button>
-        <button class="btn custom-button" id="exit-button"  data-i18n = "exit-button"></button>
+        <div id="recognized-letters" class="recognized-letters">Recognized Letters: </div> <!-- Added for displaying recognized letters -->
+        <div id="score-display" class="score-display">Score: 0</div> <!-- Added for displaying the score -->
+        <button class="btn custom-button" id="back-button" data-i18n="back-button"></button>
+        <button class="btn custom-button" id="reset-button" data-i18n="reset-button"></button>
+        <button class="btn custom-button" id="exit-button" data-i18n="exit-button"></button>
         <div class="star-rating" id="star-rating">
             <span class="star" data-value="1">&#9733;</span>
             <span class="star" data-value="2">&#9733;</span>
@@ -140,7 +142,7 @@
                     <div id="tutorial-steps">
                         <!-- Step 1 -->
                         <div class="tutorial-step" id="tutorial-step-1">
-                            <h2  data-i18n="tutorial-step-1-label"><i class="fas fa-info-circle"></i></h2>
+                            <h2 data-i18n="tutorial-step-1-label"><i class="fas fa-info-circle"></i></h2>
                             <p id="tutorial-step-1-text" data-i18n="tutorial-step-1-text"></p>
                             <div>
                                 <button class="btn custom-button tutorial-button" data-i18n="tutorial-previous-button" onclick="prevStep(1)" disabled></button>
@@ -158,7 +160,7 @@
                         </div>
                         <!-- Step 3 -->
                         <div class="tutorial-step hidden" id="tutorial-step-3">
-                            <h2 data-i18n = "tutorial-step-3-label"><i class="fas fa-play-circle"></i></h2>
+                            <h2 data-i18n="tutorial-step-3-label"><i class="fas fa-play-circle"></i></h2>
                             <p id="tutorial-step-3-text" data-i18n="tutorial-step-3-text"></p>
                             <div>
                                 <button class="btn custom-button tutorial-button" data-i18n="tutorial-previous-button" onclick="prevStep(2)"></button>
@@ -167,8 +169,8 @@
                         </div>
                         <!-- Step 4 -->
                         <div class="tutorial-step hidden" id="tutorial-step-4">
-                            <h2 data-i18n = "tutorial-step-4-label"><i class="fas fa-gamepad"></i></h2>
-                            <p id="tutorial-step-4-text"  data-i18n="tutorial-step-4-text"></p>
+                            <h2 data-i18n="tutorial-step-4-label"><i class="fas fa-gamepad"></i></h2>
+                            <p id="tutorial-step-4-text" data-i18n="tutorial-step-4-text"></p>
                             <div>
                                 <button class="btn custom-button tutorial-button" data-i18n="tutorial-previous-button" onclick="prevStep(3)"></button>
                                 <button class="btn custom-button tutorial-button" data-i18n="tutorial-finish-button" data-dismiss="modal"></button>
@@ -185,11 +187,11 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
 
-        var json_translation_EN = "{% static "json_translations/EN.json" %}"
-        var json_translation_PL = "{% static "json_translations/PL.json" %}"
+        var json_translation_EN = "{% static 'json_translations/EN.json' %}"
+        var json_translation_PL = "{% static 'json_translations/PL.json' %}"
 
     </script>
-    <script src="{% static 'js\translation.js'%}"></script>
-    <script src="{% static 'js\home.js'%}"></script>
+    <script src="{% static 'js/translation.js' %}"></script>
+    <script src="{% static 'js/home.js' %}"></script>
 </body>
 </html>

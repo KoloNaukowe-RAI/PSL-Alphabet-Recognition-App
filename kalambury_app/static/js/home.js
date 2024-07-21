@@ -1,4 +1,4 @@
-let plplayerName = '';
+let playerName = '';
 if (localStorage.getItem("playerName") === null) {
     localStorage.setItem("playerName", '');
 }
@@ -22,13 +22,12 @@ document.getElementById('theme-select').value = theme
 
 document.getElementById('language-select').addEventListener('change', (event) => {
     language = event.target.value;
-    setLanguagePreference(language);   
+    setLanguagePreference(language);
 });
 
 document.getElementById('theme-select').addEventListener('change', (event) => {
     theme = event.target.value;
     localStorage.setItem('theme', theme);
-
 });
 
 function updateTheme() {
@@ -118,7 +117,7 @@ document.getElementById('tutorial-button').addEventListener('click', () => {
 
 function startGame() {
     const duration = document.getElementById('duration').value;
-    fetch(`/start-game?language=${language}&difficulty=${difficulty}`)
+    fetch(`/start-game?player_name=${playerName}&language=${language}&difficulty=${difficulty}`)
         .then(response => response.json())
         .then(data => {
             const randomImage = document.getElementById('word-image');
@@ -132,7 +131,9 @@ function startGame() {
             document.getElementById('live-camera-feed').style.display = 'block';
             document.getElementById('live-camera-feed').src = "/live-camera-feed/";
             document.getElementById('player-name-display').textContent = `Player: ${playerName}`;
+            document.getElementById('score-display').textContent = `Score: ${data.score}`;
             startTimer(duration * 60);
+            updateRecognizedLetters();
         })
         .catch(error => {
             console.error('Error starting game:', error);
@@ -155,7 +156,9 @@ function resetGame() {
             document.getElementById('live-camera-feed').style.display = 'block';
             document.getElementById('live-camera-feed').src = "/live-camera-feed/";
             document.getElementById('player-name-display').textContent = `Player: ${playerName}`;
+            document.getElementById('score-display').textContent = `Score: ${data.score}`;
             startTimer(duration * 60);
+            updateRecognizedLetters();
         })
         .catch(error => {
             console.error('Error resetting game:', error);
@@ -179,6 +182,21 @@ function startTimer(duration) {
             timer--;
         }
     }, 1000);
+}
+
+function updateRecognizedLetters() {
+    const lettersDisplay = document.getElementById('recognized-letters');
+
+    function fetchRecognizedLetters() {
+        fetch('/live-feed-letters/?update_letters=true')
+            .then(response => response.json())
+            .then(data => {
+                lettersDisplay.textContent = "Recognized Letters: " + data.shown_letters;
+            })
+            .catch(error => console.error('Error fetching recognized letters:', error));
+    }
+
+    setInterval(fetchRecognizedLetters, 1000);
 }
 
 document.querySelectorAll('.star').forEach(star => {
