@@ -43,31 +43,31 @@
     <div class="container">
         <div class="header-section">
             <img src="https://diversity-inclusion-speakers.com/wp-content/uploads/2022/02/Deaf-Awareness-Week-.jpg" alt="Deaf Awareness">
-            <h1 data-translate-key="header">Feedback Form</h1>
+            <h1 data-i18n="header-feedback">Feedback Form</h1>
         </div>
         <div class="form-section">
             <form id="feedback-form" method="post" action="{% url 'feedback' %}">
                 {% csrf_token %}
                 <div class="form-group">
-                    <label for="name" class="label-name" data-translate-key="label-name">Name</label>
+                    <label for="name" class="label-name" data-i18n="label-name">Name</label>
                     <input type="text" class="form-control" id="name" name="name" maxlength="15" required>
-                    <small class="form-text text-muted" id="name-help" data-translate-key="name-help">Maximum 15 characters.</small>
+                    <small class="form-text text-muted" id="name-help" data-i18n="name-help">Maximum 15 characters.</small>
                 </div>
                 <div class="form-group">
-                    <label for="email" class="label-email" data-translate-key="label-email">Email</label>
+                    <label for="email" class="label-email" data-i18n="label-email">Email</label>
                     <input type="email" class="form-control" id="email" name="email" required>
                 </div>
                 <div class="form-group">
-                    <label for="gender" class="label-gender" data-translate-key="label-gender">Gender</label>
+                    <label for="gender" class="label-gender" data-i18n="label-gender">Gender</label>
                     <select class="form-control" id="gender" name="gender" required>
-                        <option value="" data-translate-key="select-gender">Select gender</option>
-                        <option value="male" data-translate-key="male">Male</option>
-                        <option value="female" data-translate-key="female">Female</option>
-                        <option value="other" data-translate-key="other">Other</option>
+                        <option value="" data-i18n="select-gender">Select gender</option>
+                        <option value="male" data-i18n="male">Male</option>
+                        <option value="female" data-i18n="female">Female</option>
+                        <option value="other" data-i18n="other">Other</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="ratingBefore" class="rating-label label-ratingBefore" data-translate-key="label-ratingBefore">Rate your sign language proficiency before the game</label>
+                    <label for="ratingBefore" class="rating-label label-ratingBefore" data-i18n="label-ratingBefore">Rate your sign language proficiency before the game</label>
                     <div class="radio-group">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="ratingBefore" id="ratingBefore0" value="0" required>
@@ -96,7 +96,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="ratingAfter" class="rating-label label-ratingAfter" data-translate-key="label-ratingAfter">Rate your sign language proficiency after the game</label>
+                    <label for="ratingAfter" class="rating-label label-ratingAfter" data-i18n="label-ratingAfter">Rate your sign language proficiency after the game</label>
                     <div class="radio-group">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="ratingAfter" id="ratingAfter0" value="0" required>
@@ -125,11 +125,11 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="message" class="label-message" data-translate-key="label-message">Message</label>
+                    <label for="message" class="label-message" data-i18n="label-message">Message</label>
                     <textarea class="form-control" id="message" name="message" rows="4" maxlength="100" required></textarea>
-                    <small class="form-text text-muted" id="message-help" data-translate-key="message-help">Maximum 100 characters.</small>
+                    <small class="form-text text-muted" id="message-help" data-i18n="message-help">Maximum 100 characters.</small>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block" data-translate-key="btn-submit">Submit feedback</button>
+                <button type="submit" class="btn btn-primary btn-block" data-i18n="btn-submit">Submit feedback</button>
             </form>
         </div>
     </div>
@@ -139,106 +139,6 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
-    <!-- Email validation script -->
-    <script>
-        const translations = {
-            'en': {
-                'header': 'Feedback Form',
-                'label-name': 'Name',
-                'name-help': 'Maximum 15 characters.',
-                'label-email': 'Email',
-                'label-gender': 'Gender',
-                'label-message': 'Message',
-                'message-help': 'Maximum 100 characters.',
-                'label-ratingBefore': 'Rate your sign language proficiency before the game',
-                'label-ratingAfter': 'Rate your sign language proficiency after the game',
-                'btn-submit': 'Submit feedback',
-                'success-message': 'Form successfully submitted!',
-                'home': 'Home',
-                'signs': 'Signs',
-                'settings': 'Settings',
-                'statistics': 'Statistics',
-                'help': 'Help',
-                'feedback': 'Feedback',
-                'select-gender': 'Select gender',
-                'male': 'Male',
-                'female': 'Female',
-                'other': 'Other',
-                'select-rating': 'Select rating'
-            },
-            'pl': {
-                'header': 'Formularz opinii',
-                'label-name': 'Imię',
-                'name-help': 'Maksymalnie 15 znaków.',
-                'label-email': 'Email',
-                'label-gender': 'Płeć',
-                'label-message': 'Wiadomość',
-                'message-help': 'Maksymalnie 100 znaków.',
-                'label-ratingBefore': 'Oceń znajomość języka migowego przed grą',
-                'label-ratingAfter': 'Oceń znajomość języka migowego po grze',
-                'btn-submit': 'Wyślij opinię',
-                'success-message': 'Formularz został pomyślnie wysłany!',
-                'home': 'Strona Główna',
-                'signs': 'Znaki',
-                'settings': 'Ustawienia',
-                'statistics': 'Statystyki',
-                'help': 'Pomoc',
-                'feedback': 'Opinie',
-                'select-gender': 'Wybierz płeć',
-                'male': 'Mężczyzna',
-                'female': 'Kobieta',
-                'other': 'Inne',
-                'select-rating': 'Wybierz ocenę'
-            }
-        };
-
-        function toggleLanguage(lang) {
-            document.querySelector('.navbar-brand').innerHTML = `Kalambury <i class="fas fa-american-sign-language-interpreting"></i>`;
-            document.querySelector('.header-section h1').textContent = translations[lang]['header'];
-            document.querySelectorAll('[data-translate-key]').forEach(el => {
-                const key = el.getAttribute('data-translate-key');
-                if (el.classList.contains('sidebar-link')) {
-                    const iconHtml = el.querySelector('.icon').outerHTML;
-                    el.innerHTML = iconHtml + translations[lang][key];
-                } else {
-                    el.textContent = translations[lang][key];
-                }
-            });
-        }
-
-        document.getElementById('feedback-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const email = document.getElementById('email').value;
-            const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-            if (!emailPattern.test(email)) {
-                alert('Please enter a valid email address.');
-                return;
-            }
-            const name = document.getElementById('name').value;
-            if (/[^a-zA-Z0-9]/.test(name)) {
-                alert('Name can only contain alphanumeric characters.');
-                return;
-            }
-            this.submit();
-        });
-
-        function openNav() {
-            document.getElementById("mySidebar").style.width = "250px";
-        }
-
-        function closeNav() {
-            document.getElementById("mySidebar").style.width = "0";
-        }
-
-        function updateTheme() {
-            if (localStorage.getItem("theme") === 'light') {
-                document.body.classList.add('light-mode');
-            } else {
-                document.body.classList.remove('light-mode');
-            }
-        }
-        updateTheme();
-    </script>
 
     <script>
 

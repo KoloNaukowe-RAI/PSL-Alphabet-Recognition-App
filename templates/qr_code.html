@@ -39,9 +39,9 @@
   </div>
 
   <div class="container">
-      <h2 data-translate-key="qr-code">Scan QR Code</h2>
+      <h2 data-i18n="qr-code"></h2>
       <img src="data:image/png;base64,{{ qr_code }}" alt="QR Code" class="img-fluid">
-      <button class="btn btn-primary btn-block" onclick="window.location.href='{% url 'home' %}'" data-translate-key="return-menu">Return to Menu</button>
+      <button class="btn btn-primary btn-block" onclick="window.location.href='{% url 'home' %}'" data-i18n="return-menu"></button>
   </div>
 
   <!-- Bootstrap JavaScript -->
@@ -50,58 +50,6 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
   <script src="{% static 'js/qr_code.js' %}"></script>
   <!-- Sidebar and Language Toggle Scripts -->
-  <script>
-      const translations = {
-          'en': {
-              'header': 'QR Code',
-              'home': 'Home',
-              'signs': 'Signs',
-              'settings': 'Settings',
-              'statistics': 'Statistics',
-              'help': 'Help',
-              'qr-code': 'Scan QR Code',
-              'return-menu': 'Return to Menu'
-          },
-          'pl': {
-              'header': 'Kod QR',
-              'home': 'Strona Główna',
-              'signs': 'Znaki',
-              'settings': 'Ustawienia',
-              'statistics': 'Statystyki',
-              'help': 'Pomoc',
-              'qr-code': 'Skanuj kod QR',
-              'return-menu': 'Powrót do Menu'
-          }
-      };
-
-      function toggleLanguage(lang) {
-          document.querySelector('.navbar-brand').innerHTML = `Kalambury <i class="fas fa-american-sign-language-interpreting"></i>`;
-          document.querySelector('.container h2').textContent = translations[lang]['qr-code'];
-          document.querySelector('.btn-primary').textContent = translations[lang]['return-menu'];
-
-          const sidebarLinks = document.querySelectorAll('.sidebar-link');
-          sidebarLinks.forEach(link => {
-              const translateKey = link.getAttribute('data-translate-key');
-              link.querySelector('.link-text').textContent = translations[lang][translateKey];
-          });
-      }
-
-      function openNav() {
-          document.getElementById("mySidebar").style.width = "250px";
-      }
-
-      function closeNav() {
-          document.getElementById("mySidebar").style.width = "0";
-      }
-
-      const sidebarLinks = document.querySelectorAll('.sidebar-link');
-      sidebarLinks.forEach(link => {
-          if (link.href === window.location.href) {
-              link.classList.add('active');
-          }
-      });
-  </script>
-    
     <script>
 
         var json_translation_EN = "{% static "json_translations/EN.json" %}"
