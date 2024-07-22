@@ -176,7 +176,7 @@ function resetGame() {
         });
 
     // Clear the buffer
-    fetch(`/live-camera-feed/?reset_buffer=true`)
+    fetch(`/live-camera-feed/?reset_buffer=false`)
         .then(response => response.json())
         .then(data => {
             console.log('Buffer clear response:', data);

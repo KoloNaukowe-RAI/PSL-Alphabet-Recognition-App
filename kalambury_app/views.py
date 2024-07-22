@@ -87,8 +87,6 @@ class ResetGameView(View):
         difficulty = request.GET.get('difficulty', 'easy')
         category, word, image_url = self.select_random_category_word_and_image(difficulty)
         cache.set('random_word', word)
-        print(word)
-        print("test")
 
         # Update the game session with a new word
         game_session = GameSession.objects.filter(player_name=player_name).last()
@@ -129,18 +127,29 @@ class ResetGameView(View):
 
 
 class ProcessVideoFrameView(View):
-    def post(self, request):
-        frame_data = request.FILES['frame'].read()
-        np_frame = np.frombuffer(frame_data, dtype=np.uint8)
-        img = cv2.imdecode(np_frame, cv2.IMREAD_COLOR)
+    def get(self, request):
+        reset_buffer = request.GET.get('reset_buffer', 'false').lower() == 'true'
+        if reset_buffer:
+            self.clear_buffer()
+            print("Buffer cleared")
+            return JsonResponse({'status': 'Buffer cleared'})
 
-        result_img, landmarks = self.process_frame(img)
-        _, img_encoded = cv2.imencode('.jpg', result_img)
-        response = {
-            'image': img_encoded.tobytes(),
-            'landmarks': landmarks
-        }
-        return JsonResponse(response)
+        try:
+            return StreamingHttpResponse(self.generate_frames(VideoCamera()),
+                                         content_type="multipart/x-mixed-replace; boundary=frame")
+        except Exception as e:
+            print("Error in ProcessVideoFrameView.get:", e)
+            return JsonResponse({'error': 'Streaming error'}, status=500)
+
+    def generate_frames(self, camera):
+        while True:
+            frame = camera.get_frame()
+            frame_np = np.frombuffer(frame, dtype=np.uint8)
+            frame_img = cv2.imdecode(frame_np, cv2.IMREAD_COLOR)
+            processed_frame, landmarks = self.process_frame(frame_img)
+            _, jpeg = cv2.imencode('.jpg', processed_frame)
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n\r\n')
 
     def process_frame(self, frame):
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -152,18 +161,6 @@ class ProcessVideoFrameView(View):
                     frame, hand_landmarks, mp.solutions.hands.HAND_CONNECTIONS)
                 landmarks.append([[landmark.x, landmark.y, landmark.z] for landmark in hand_landmarks.landmark])
         return frame, landmarks
-
-    @staticmethod
-    def clear_buffer_static():
-        cache.set('handedness', '')
-        cache.set('random_word', '')
-        cache.set('shown_letters', [])
-        cache.set('data', [])
-        cache.set('data_doubled', [])
-        cache.set('letters_to_show', [])
-
-    def clear_buffer(self):
-        self.clear_buffer_static()
 
 class LiveCameraFeedView(View):
     def __init__(self, *args, **kwargs):
@@ -284,10 +281,9 @@ class LiveCameraFeedView(View):
                     self.data_doubled.append(cur_landmarks)
                     self.data_doubled.append(cur_landmarks)
 
-        print(len(self.data))
         print(self.letters_to_show)
-        print(len(self.shown_letters))
-        print(len(self.letters_to_show))
+        print(self.shown_letters)
+
         if len(self.data) >= 30 and len(self.shown_letters) < len(self.letters_to_show):
             self.data_doubled = self.data_doubled[-60:]
             pred_double = self.model.predict(np.expand_dims(self.data_doubled, axis=0))[0]
