@@ -9,7 +9,6 @@ class KalamburyAppConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'kalambury_app'
 
-    global model
     model_path = "./model/24_07_17_16_40_44_FINAL.h5"
     model = load_model(model_path)
     cache.set('model', model)
