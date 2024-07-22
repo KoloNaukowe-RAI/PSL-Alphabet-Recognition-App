@@ -11,6 +11,7 @@ from django.views import View
 from django.conf import settings
 from django.core.cache import cache
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 from .models import GameSession, Feedback
 from .forms import FeedbackForm
 from .camera import VideoCamera
@@ -20,7 +21,6 @@ import base64
 
 mp_hands = mp.solutions.hands.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5)
 
-# Konfiguracja loggera
 logger = logging.getLogger(__name__)
 
 dataset = {
@@ -30,13 +30,16 @@ dataset = {
     "Zawody": ["fryzjer", "kelner", "lekarz"]
 }
 
+
 class HomeView(View):
     def get(self, request):
         return render(request, 'home.html')
 
+
 class SignsView(View):
     def get(self, request):
         return render(request, 'signs.html')
+
 
 class StartGameView(View):
     def get(self, request):
@@ -77,12 +80,15 @@ class StartGameView(View):
         image_path = os.path.join(settings.STATIC_URL, 'images_to_display', f'{word}.png')
         return image_path
 
+
 class ResetGameView(View):
     def get(self, request):
         player_name = cache.get('player_name', 'Unknown')
         difficulty = request.GET.get('difficulty', 'easy')
         category, word, image_url = self.select_random_category_word_and_image(difficulty)
         cache.set('random_word', word)
+        print(word)
+        print("test")
 
         # Update the game session with a new word
         game_session = GameSession.objects.filter(player_name=player_name).last()
@@ -90,8 +96,7 @@ class ResetGameView(View):
             game_session.word = word
             game_session.save()
 
-        # Clear buffer
-        self.clear_buffer()
+        #LiveCameraFeedView.clear_buffer()
 
         score = cache.get(f'score_{player_name}', 0)
 
@@ -122,13 +127,6 @@ class ResetGameView(View):
         image_path = os.path.join(settings.STATIC_URL, 'images_to_display', f'{word}.png')
         return image_path
 
-    def clear_buffer(self):
-        cache.set('handedness', '')
-        cache.set('random_word', '')
-        cache.set('shown_letters', [])
-        cache.set('data', [])
-        cache.set('data_doubled', [])
-        cache.set('letters_to_show', [])
 
 class ProcessVideoFrameView(View):
     def post(self, request):
@@ -155,6 +153,18 @@ class ProcessVideoFrameView(View):
                 landmarks.append([[landmark.x, landmark.y, landmark.z] for landmark in hand_landmarks.landmark])
         return frame, landmarks
 
+    @staticmethod
+    def clear_buffer_static():
+        cache.set('handedness', '')
+        cache.set('random_word', '')
+        cache.set('shown_letters', [])
+        cache.set('data', [])
+        cache.set('data_doubled', [])
+        cache.set('letters_to_show', [])
+
+    def clear_buffer(self):
+        self.clear_buffer_static()
+
 class LiveCameraFeedView(View):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -168,14 +178,26 @@ class LiveCameraFeedView(View):
         self.handedness = cache.get('handedness')
         self.label_dict = cache.get('labels')
 
+    # @staticmethod
+    # def clear_buffer_static():
+    #     cache.set('handedness', '')
+    #     cache.set('random_word', '')
+    #     cache.set('shown_letters', [])
+    #     cache.set('data', [])
+    #     cache.set('data_doubled', [])
+    #     cache.set('letters_to_show', [])
+
     def clear_buffer(self):
-        self.handedness = cache.get('handedness')
-        self.random_word = cache.get('random_word')
+        self.letters_to_show = []
         self.shown_letters = []
         self.data = []
         self.data_doubled = []
-        self.letters_to_show = []
+        self.handedness = cache.get('handedness')
+        self.label_dict = cache.get('labels')
+        self.random_word = cache.get('random_word')
+        print(self.random_word)
         self.word_to_signs()
+        print(self.letters_to_show)
 
     def word_to_signs(self):
         word = self.random_word
@@ -213,6 +235,12 @@ class LiveCameraFeedView(View):
             i += 1
 
     def get(self, request):
+        reset_buffer = request.GET.get('reset_buffer', 'false').lower() == 'true'
+        if reset_buffer:
+            self.clear_buffer()
+            print("Buffer cleared")
+            return JsonResponse({'status': 'Buffer cleared'})
+
         try:
             return StreamingHttpResponse(self.generate_frames(VideoCamera()),
                                          content_type="multipart/x-mixed-replace; boundary=frame")
@@ -256,6 +284,10 @@ class LiveCameraFeedView(View):
                     self.data_doubled.append(cur_landmarks)
                     self.data_doubled.append(cur_landmarks)
 
+        print(len(self.data))
+        print(self.letters_to_show)
+        print(len(self.shown_letters))
+        print(len(self.letters_to_show))
         if len(self.data) >= 30 and len(self.shown_letters) < len(self.letters_to_show):
             self.data_doubled = self.data_doubled[-60:]
             pred_double = self.model.predict(np.expand_dims(self.data_doubled, axis=0))[0]
@@ -264,7 +296,8 @@ class LiveCameraFeedView(View):
                     self.shown_letters.append(list(self.label_dict.keys())[index[0]])
                     player_name = cache.get('player_name', 'Unknown')
                     score = cache.get(f'score_{player_name}', 0)
-                    score += 1  # 1 point for each correctly shown letter
+                    if len(self.shown_letters) <= len(self.letters_to_show):
+                        score += 1  # 1 point for each correctly shown letter
                     cache.set(f'score_{player_name}', score)
                     self.data_doubled = []
                     self.data = []
@@ -278,7 +311,8 @@ class LiveCameraFeedView(View):
                     self.shown_letters.append(list(self.label_dict.keys())[index[0]])
                     player_name = cache.get('player_name', 'Unknown')
                     score = cache.get(f'score_{player_name}', 0)
-                    score += 1  # 1 point for each correctly shown letter
+                    if len(self.shown_letters) <= len(self.letters_to_show):
+                        score += 1  # 1 point for each correctly shown letter
                     cache.set(f'score_{player_name}', score)
                     self.data_doubled = []
                     self.data = []
@@ -287,10 +321,12 @@ class LiveCameraFeedView(View):
         if len(self.shown_letters) == len(self.letters_to_show):
             player_name = cache.get('player_name', 'Unknown')
             score = cache.get(f'score_{player_name}', 0)
-            score += 10  # Bonus points for correctly showing the whole word
+            if len(self.shown_letters) == len(self.letters_to_show):
+                score += 10  # Bonus points for correctly showing the whole word
             cache.set(f'score_{player_name}', score)
 
         return frame
+
 
 class LiveFeedLettersView(View):
     def get(self, request):
@@ -299,6 +335,7 @@ class LiveFeedLettersView(View):
             shown_letters = cache.get('shown_letters', [])
             return JsonResponse({'shown_letters': shown_letters})
         return JsonResponse({'error': 'Invalid request'}, status=400)
+
 
 def feedback_view(request):
     if request.method == 'POST':
@@ -310,8 +347,10 @@ def feedback_view(request):
         form = FeedbackForm()
     return render(request, 'feedback.html', {'form': form})
 
+
 def feedback_thanks_view(request):
     return render(request, 'feedback_thanks.html')
+
 
 class QRCodeView(View):
     def get(self, request):

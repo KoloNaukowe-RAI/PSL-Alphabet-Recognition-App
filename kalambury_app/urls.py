@@ -1,12 +1,9 @@
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import (
-    HomeView, SignsView, StartGameView, ProcessVideoFrameView,
-    LiveCameraFeedView, feedback_view, feedback_thanks_view, QRCodeView, ResetGameView
-)
+from .views import HomeView, SignsView, StartGameView, ProcessVideoFrameView
+from .views import LiveCameraFeedView, feedback_view, feedback_thanks_view, QRCodeView, ResetGameView, LiveFeedLettersView
 
-from .views import HomeView, SignsView, StartGameView, ResetGameView, ProcessVideoFrameView, LiveCameraFeedView, LiveFeedLettersView, feedback_view, feedback_thanks_view, QRCodeView
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
@@ -20,9 +17,6 @@ urlpatterns = [
     path('feedback/thanks/', feedback_thanks_view, name='feedback_thanks'),
     path('qr_code/', QRCodeView.as_view(), name='qr_code'),
 ]
-
-
-
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
