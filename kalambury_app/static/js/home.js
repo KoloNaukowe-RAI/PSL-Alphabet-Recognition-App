@@ -28,6 +28,7 @@ document.getElementById('language-select').addEventListener('change', (event) =>
 document.getElementById('theme-select').addEventListener('change', (event) => {
     theme = event.target.value;
     localStorage.setItem('theme', theme);
+    updateTheme();
 });
 
 function updateTheme() {
@@ -138,6 +139,16 @@ function startGame() {
         .catch(error => {
             console.error('Error starting game:', error);
         });
+
+        // Clear the buffer
+        fetch(`/live-camera-feed/?reset_buffer=true`)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Buffer clear response:', data);
+            })
+            .catch(error => {
+                console.error('Error clearing buffer:', error);
+            });
 }
 
 function resetGame() {
@@ -153,15 +164,25 @@ function resetGame() {
                 console.error('Random image element not found.');
             }
 
-            document.getElementById('live-camera-feed').style.display = 'block';
-            document.getElementById('live-camera-feed').src = "/live-camera-feed/";
-            document.getElementById('player-name-display').textContent = `Player: ${playerName}`;
+            //document.getElementById('live-camera-feed').style.display = 'block';
+            //document.getElementById('live-camera-feed').src = "/live-camera-feed/";
+            //document.getElementById('player-name-display').textContent = `Player: ${playerName}`;
             document.getElementById('score-display').textContent = `Score: ${data.score}`;
-            startTimer(duration * 60);
-            updateRecognizedLetters();
+            //startTimer(duration * 60);
+            //updateRecognizedLetters();
         })
         .catch(error => {
             console.error('Error resetting game:', error);
+        });
+
+    // Clear the buffer
+    fetch(`/live-camera-feed/?reset_buffer=true`)
+        .then(response => response.json())
+        .then(data => {
+            console.log('Buffer clear response:', data);
+        })
+        .catch(error => {
+            console.error('Error clearing buffer:', error);
         });
 }
 
