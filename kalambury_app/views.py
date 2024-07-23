@@ -22,7 +22,7 @@ import base64
 mp_hands = mp.solutions.hands.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5)
 
 logger = logging.getLogger(__name__)
-
+camera = VideoCamera()
 dataset = {
     "Zwierzęta": ["delfin", "dzik", "koń", "kot", "krowa", "małpa", "owca", "pies", "ptak", "ryba", "słoń", "zebra"],
     "Owoce": ["arbuz", "banan", "jabłko", "malina", "pomarańcza", "truskawka"],
@@ -211,7 +211,6 @@ class LiveCameraFeedView(View):
         self.word_to_signs()
         self.handedness = cache.get('handedness')
         self.label_dict = cache.get('labels')
-        self.camera = VideoCamera()
 
     def __del__(self):
         del self.camera
@@ -274,7 +273,7 @@ class LiveCameraFeedView(View):
             return JsonResponse({'status': 'Buffer cleared'})
 
         try:
-            return StreamingHttpResponse(self.generate_frames(self.camera),
+            return StreamingHttpResponse(self.generate_frames(camera),
                                          content_type="multipart/x-mixed-replace; boundary=frame")
         except Exception as e:
             print("Error in LiveCameraFeedView.get:", e)
@@ -292,6 +291,7 @@ class LiveCameraFeedView(View):
 
     def process_frame(self, frame):
         self.get_cached_data()
+        print(self.letters_to_show)
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         results = mp_hands.process(frame_rgb)
         current_landmarks = []
