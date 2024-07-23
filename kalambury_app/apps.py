@@ -15,6 +15,8 @@ class KalamburyAppConfig(AppConfig):
 
     cache.set('random_word', None)
     cache.set('handedness', 'Left')
+    cache.set('letters_to_show', [])
+    cache.set('shown_letters', [])
 
     with open(os.path.join("./model", "label_dict.json"), 'r', encoding='utf-8') as file:
         # Load the data from the file
