@@ -94,6 +94,19 @@ class ResetGameView(View):
             game_session.word = word
             game_session.save()
 
+
+        shown_letters = cache.get('shown_letters', [])
+        letters_to_show = cache.get('letters_to_show', [])
+        if len(shown_letters) == len(letters_to_show):
+            guessed_word = 'true'
+            player_name = cache.get('player_name', 'Unknown')
+            score = cache.get(f'score_{player_name}', 0)
+            score += 10
+
+            cache.set(f'score_{player_name}', score)
+
+        cache.set(letters_to_show, [])
+        cache.set(shown_letters, [])
         #LiveCameraFeedView.clear_buffer()
 
         score = cache.get(f'score_{player_name}', 0)
@@ -147,6 +160,11 @@ class ProcessVideoFrameView(View):
             frame_np = np.frombuffer(frame, dtype=np.uint8)
             frame_img = cv2.imdecode(frame_np, cv2.IMREAD_COLOR)
             processed_frame, landmarks = self.process_frame(frame_img)
+            data = cache.get('data', [])
+            if len(landmarks) > 0:
+                data.append(landmarks)
+                cache.set('data', data)
+
             _, jpeg = cv2.imencode('.jpg', processed_frame)
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n\r\n')
@@ -154,13 +172,40 @@ class ProcessVideoFrameView(View):
     def process_frame(self, frame):
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         results = mp_hands.process(frame_rgb)
-        landmarks = []
+        current_landmarks = []
         if results.multi_hand_landmarks:
-            for hand_landmarks in results.multi_hand_landmarks:
-                mp.solutions.drawing_utils.draw_landmarks(
-                    frame, hand_landmarks, mp.solutions.hands.HAND_CONNECTIONS)
-                landmarks.append([[landmark.x, landmark.y, landmark.z] for landmark in hand_landmarks.landmark])
-        return frame, landmarks
+            hand_to_use = cache.get('handedness')
+            for hand_landmarks, handedness in zip(results.multi_hand_landmarks, results.multi_handedness):
+                # Check if the hand matches the selected handedness
+                if handedness.classification[0].label == hand_to_use:
+                    mp.solutions.drawing_utils.draw_landmarks(
+                        frame,
+                        hand_landmarks,
+                        mp.solutions.hands.HAND_CONNECTIONS,
+                        mp.solutions.drawing_styles.get_default_hand_landmarks_style(),
+                        mp.solutions.drawing_styles.get_default_hand_connections_style()
+                    )
+
+                    for hand_landmark in hand_landmarks.landmark:
+                        x = hand_landmark.x
+                        if hand_to_use == 'Right':
+                            x = -1 * (x - 1)
+                        current_landmarks.append(np.array([x, hand_landmark.y, hand_landmark.z]))
+
+        return frame, np.array(current_landmarks)
+
+class ShownLettersView(View):
+    def get(self, request):
+        letters_to_show = cache.get('letters_to_show', [])
+        shown_letters = cache.get('shown_letters', [])
+        letters_to_show_string = ''.join(letters_to_show)
+        shown_letters_string = ''.join(shown_letters)
+        guessed_word = 'false'
+        if len(shown_letters) == len(letters_to_show):
+            guessed_word = 'true'
+
+        return JsonResponse({'letters_to_show': letters_to_show_string, 'shown_letters': shown_letters_string, 'guessed_word': guessed_word})
+
 
 class LiveCameraFeedView(View):
     def __init__(self, *args, **kwargs):
@@ -184,16 +229,20 @@ class LiveCameraFeedView(View):
     #     cache.set('data_doubled', [])
     #     cache.set('letters_to_show', [])
 
-    def clear_buffer(self):
-        self.letters_to_show = []
-        self.shown_letters = []
-        self.data = []
+    def get_cached_data(self):
+        self.letters_to_show = cache.get('letters_to_show', [])
+        self.shown_letters = cache.get('shown_letters', [])
         self.data_doubled = []
+        for val in self.data:
+            self.data_doubled.append(val)
+            self.data_doubled.append(val)
         self.handedness = cache.get('handedness')
-        self.label_dict = cache.get('labels')
-        self.random_word = cache.get('random_word')
-        print(self.random_word)
-        self.word_to_signs()
+        if not self.letters_to_show:
+            self.data = []
+            self.data_doubled = []
+            self.random_word = cache.get('random_word')
+            self.word_to_signs()
+            cache.set('letters_to_show', self.letters_to_show)
         print(self.letters_to_show)
 
     def word_to_signs(self):
@@ -234,8 +283,6 @@ class LiveCameraFeedView(View):
     def get(self, request):
         reset_buffer = request.GET.get('reset_buffer', 'false').lower() == 'true'
         if reset_buffer:
-            self.clear_buffer()
-            print("Buffer cleared")
             return JsonResponse({'status': 'Buffer cleared'})
 
         try:
@@ -292,9 +339,9 @@ class LiveCameraFeedView(View):
                     self.shown_letters.append(list(self.label_dict.keys())[index[0]])
                     player_name = cache.get('player_name', 'Unknown')
                     score = cache.get(f'score_{player_name}', 0)
-                    if len(self.shown_letters) <= len(self.letters_to_show):
-                        score += 1  # 1 point for each correctly shown letter
+                    score += 1  # 1 point for each correctly shown letter
                     cache.set(f'score_{player_name}', score)
+                    cache.set('shown_letters', self.shown_letters)
                     self.data_doubled = []
                     self.data = []
                     break
@@ -305,21 +352,21 @@ class LiveCameraFeedView(View):
             for index in np.argwhere(pred > 0.33):
                 if list(self.label_dict.keys())[index[0]] == self.letters_to_show[len(self.shown_letters)]:
                     self.shown_letters.append(list(self.label_dict.keys())[index[0]])
+                    cache.set('shown_letters', self.shown_letters)
                     player_name = cache.get('player_name', 'Unknown')
                     score = cache.get(f'score_{player_name}', 0)
-                    if len(self.shown_letters) <= len(self.letters_to_show):
-                        score += 1  # 1 point for each correctly shown letter
+                    score += 1  # 1 point for each correctly shown letter
                     cache.set(f'score_{player_name}', score)
                     self.data_doubled = []
                     self.data = []
                     break
 
-        if len(self.shown_letters) == len(self.letters_to_show):
-            player_name = cache.get('player_name', 'Unknown')
-            score = cache.get(f'score_{player_name}', 0)
-            if len(self.shown_letters) == len(self.letters_to_show):
-                score += 10  # Bonus points for correctly showing the whole word
-            cache.set(f'score_{player_name}', score)
+        # if len(self.shown_letters) == len(self.letters_to_show):
+        #     player_name = cache.get('player_name', 'Unknown')
+        #     score = cache.get(f'score_{player_name}', 0)
+        #     if len(self.shown_letters) == len(self.letters_to_show):
+        #         score += 10  # Bonus points for correctly showing the whole word
+        #     cache.set(f'score_{player_name}', score)
 
         return frame
 
