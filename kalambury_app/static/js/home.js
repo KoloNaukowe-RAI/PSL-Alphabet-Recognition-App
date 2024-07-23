@@ -169,12 +169,7 @@ function resetGame() {
                 console.error('Random image element not found.');
             }
 
-            //document.getElementById('live-camera-feed').style.display = 'block';
-            //document.getElementById('live-camera-feed').src = "/live-camera-feed/";
-            //document.getElementById('player-name-display').textContent = `Player: ${playerName}`;
             document.getElementById('score-display').textContent = `Score: ${data.score}`;
-            //startTimer(duration * 60);
-            //updateRecognizedLetters();
         })
         .catch(error => {
             console.error('Error resetting game:', error);
@@ -202,12 +197,14 @@ function startTimer(duration) {
 
 function updateRecognizedLetters() {
     const lettersDisplay = document.getElementById('recognized-letters');
+    const scoreDisplay = document.getElementById('score-display');
 
     function fetchRecognizedLetters() {
         fetch('/live-feed-letters/?update_letters=true')
             .then(response => response.json())
             .then(data => {
                 lettersDisplay.textContent = "Recognized Letters: " + data.shown_letters;
+                scoreDisplay.textContent = `Score: ${data.score}`;
             })
             .catch(error => console.error('Error fetching recognized letters:', error));
     }
