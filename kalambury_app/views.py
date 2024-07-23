@@ -144,60 +144,60 @@ class ResetGameView(View):
         return image_path
 
 
-class ProcessVideoFrameView(View):
-    def get(self, request):
-        reset_buffer = request.GET.get('reset_buffer', 'false').lower() == 'true'
-        if reset_buffer:
-            self.clear_buffer()
-            print("Buffer cleared")
-            return JsonResponse({'status': 'Buffer cleared'})
-
-        try:
-            return StreamingHttpResponse(self.generate_frames(VideoCamera()),
-                                         content_type="multipart/x-mixed-replace; boundary=frame")
-        except Exception as e:
-            print("Error in ProcessVideoFrameView.get:", e)
-            return JsonResponse({'error': 'Streaming error'}, status=500)
-
-    def generate_frames(self, camera):
-        while True:
-            frame = camera.get_frame()
-            frame_np = np.frombuffer(frame, dtype=np.uint8)
-            frame_img = cv2.imdecode(frame_np, cv2.IMREAD_COLOR)
-            processed_frame, landmarks = self.process_frame(frame_img)
-            data = cache.get('data', [])
-            if len(landmarks) > 0:
-                data.append(landmarks)
-                cache.set('data', data)
-
-            _, jpeg = cv2.imencode('.jpg', processed_frame)
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n\r\n')
-
-    def process_frame(self, frame):
-        frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        results = mp_hands.process(frame_rgb)
-        current_landmarks = []
-        if results.multi_hand_landmarks:
-            hand_to_use = cache.get('handedness')
-            for hand_landmarks, handedness in zip(results.multi_hand_landmarks, results.multi_handedness):
-                # Check if the hand matches the selected handedness
-                if handedness.classification[0].label == hand_to_use:
-                    mp.solutions.drawing_utils.draw_landmarks(
-                        frame,
-                        hand_landmarks,
-                        mp.solutions.hands.HAND_CONNECTIONS,
-                        mp.solutions.drawing_styles.get_default_hand_landmarks_style(),
-                        mp.solutions.drawing_styles.get_default_hand_connections_style()
-                    )
-
-                    for hand_landmark in hand_landmarks.landmark:
-                        x = hand_landmark.x
-                        if hand_to_use == 'Right':
-                            x = -1 * (x - 1)
-                        current_landmarks.append(np.array([x, hand_landmark.y, hand_landmark.z]))
-
-        return frame, np.array(current_landmarks)
+# class ProcessVideoFrameView(View):
+#     def get(self, request):
+#         reset_buffer = request.GET.get('reset_buffer', 'false').lower() == 'true'
+#         if reset_buffer:
+#             self.clear_buffer()
+#             print("Buffer cleared")
+#             return JsonResponse({'status': 'Buffer cleared'})
+#
+#         try:
+#             return StreamingHttpResponse(self.generate_frames(VideoCamera()),
+#                                          content_type="multipart/x-mixed-replace; boundary=frame")
+#         except Exception as e:
+#             print("Error in ProcessVideoFrameView.get:", e)
+#             return JsonResponse({'error': 'Streaming error'}, status=500)
+#
+#     def generate_frames(self, camera):
+#         while True:
+#             frame = camera.get_frame()
+#             frame_np = np.frombuffer(frame, dtype=np.uint8)
+#             frame_img = cv2.imdecode(frame_np, cv2.IMREAD_COLOR)
+#             processed_frame, landmarks = self.process_frame(frame_img)
+#             data = cache.get('data', [])
+#             if len(landmarks) > 0:
+#                 data.append(landmarks)
+#                 cache.set('data', data)
+#
+#             _, jpeg = cv2.imencode('.jpg', processed_frame)
+#             yield (b'--frame\r\n'
+#                    b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n\r\n')
+#
+#     def process_frame(self, frame):
+#         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+#         results = mp_hands.process(frame_rgb)
+#         current_landmarks = []
+#         if results.multi_hand_landmarks:
+#             hand_to_use = cache.get('handedness')
+#             for hand_landmarks, handedness in zip(results.multi_hand_landmarks, results.multi_handedness):
+#                 # Check if the hand matches the selected handedness
+#                 if handedness.classification[0].label == hand_to_use:
+#                     mp.solutions.drawing_utils.draw_landmarks(
+#                         frame,
+#                         hand_landmarks,
+#                         mp.solutions.hands.HAND_CONNECTIONS,
+#                         mp.solutions.drawing_styles.get_default_hand_landmarks_style(),
+#                         mp.solutions.drawing_styles.get_default_hand_connections_style()
+#                     )
+#
+#                     for hand_landmark in hand_landmarks.landmark:
+#                         x = hand_landmark.x
+#                         if hand_to_use == 'Right':
+#                             x = -1 * (x - 1)
+#                         current_landmarks.append(np.array([x, hand_landmark.y, hand_landmark.z]))
+#
+#         return frame, np.array(current_landmarks)
 
 class LiveCameraFeedView(View):
     def __init__(self, *args, **kwargs):
@@ -216,15 +216,6 @@ class LiveCameraFeedView(View):
     def __del__(self):
         del self.camera
         print("Camera released")
-
-    # @staticmethod
-    # def clear_buffer_static():
-    #     cache.set('handedness', '')
-    #     cache.set('random_word', '')
-    #     cache.set('shown_letters', [])
-    #     cache.set('data', [])
-    #     cache.set('data_doubled', [])
-    #     cache.set('letters_to_show', [])
 
     def get_cached_data(self):
         self.letters_to_show = cache.get('letters_to_show', [])
@@ -326,9 +317,6 @@ class LiveCameraFeedView(View):
                     self.data_doubled.append(cur_landmarks)
                     self.data_doubled.append(cur_landmarks)
 
-        # print(self.letters_to_show)
-        print(self.shown_letters)
-
         if len(self.data) >= 30 and len(self.shown_letters) < len(self.letters_to_show):
             self.data_doubled = self.data_doubled[-60:]
             pred_double = self.model.predict(np.expand_dims(self.data_doubled, axis=0))[0]
@@ -358,13 +346,6 @@ class LiveCameraFeedView(View):
                     self.data_doubled = []
                     self.data = []
                     break
-
-        # if len(self.shown_letters) == len(self.letters_to_show):
-        #     player_name = cache.get('player_name', 'Unknown')
-        #     score = cache.get(f'score_{player_name}', 0)
-        #     if len(self.shown_letters) == len(self.letters_to_show):
-        #         score += 10  # Bonus points for correctly showing the whole word
-        #     cache.set(f'score_{player_name}', score)
 
         return frame
 
