@@ -1,7 +1,7 @@
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import HomeView, SignsView, StartGameView, ProcessVideoFrameView
+from .views import HomeView, SignsView, StartGameView
 from .views import LiveCameraFeedView, feedback_view, feedback_thanks_view, QRCodeView, ResetGameView, LiveFeedLettersView
 
 
@@ -10,7 +10,6 @@ urlpatterns = [
     path('signs/', SignsView.as_view(), name='signs'),
     path('start-game/', StartGameView.as_view(), name='start_game'),
     path('reset-game/', ResetGameView.as_view(), name='reset_game'),
-    path('process-frame/', ProcessVideoFrameView.as_view(), name='process_frame'),
     path('live-camera-feed/', LiveCameraFeedView.as_view(), name='live_camera_feed'),
     path('live-feed-letters/', LiveFeedLettersView.as_view(), name='live_feed_letters'),
     path('feedback/', feedback_view, name='feedback'),
