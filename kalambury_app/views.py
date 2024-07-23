@@ -43,17 +43,23 @@ class SignsView(View):
 
 class StartGameView(View):
     def get(self, request):
-        player_name = request.GET.get('player_name', 'Unknown')
+        player_name = cache.get('player_name', 'Unknown')
         difficulty = request.GET.get('difficulty', 'easy')
         category, word, image_url = self.select_random_category_word_and_image(difficulty)
         cache.set('random_word', word)
-        cache.set('player_name', player_name)
-        score = cache.get(f'score_{player_name}', 0)
 
-        # Save game session
-        GameSession.objects.create(player_name=player_name, word=word)
+        # Update the game session with a new word
+        game_session = GameSession.objects.filter(player_name=player_name).last()
+        if game_session:
+            game_session.word = word
+            game_session.save()
 
-        return JsonResponse({'category': category, 'word': word, 'image_url': image_url, 'score': score})
+        cache.set(f'score_{player_name}', 0)
+        cache.set('letters_to_show', [])
+        cache.set('shown_letters', [])
+        print("Game reset")
+
+        return JsonResponse({'category': category, 'word': word, 'image_url': image_url, 'score': 0})
 
     def select_random_category_word_and_image(self, difficulty):
         filtered_dataset = self.filter_by_difficulty(difficulty)
@@ -94,10 +100,9 @@ class ResetGameView(View):
             game_session.word = word
             game_session.save()
 
-
         shown_letters = cache.get('shown_letters', [])
         letters_to_show = cache.get('letters_to_show', [])
-        if len(shown_letters) == len(letters_to_show):
+        if len(shown_letters) == len(letters_to_show) and len(shown_letters) > 0:
             guessed_word = 'true'
             player_name = cache.get('player_name', 'Unknown')
             score = cache.get(f'score_{player_name}', 0)
@@ -105,9 +110,9 @@ class ResetGameView(View):
 
             cache.set(f'score_{player_name}', score)
 
-        cache.set(letters_to_show, [])
-        cache.set(shown_letters, [])
-        #LiveCameraFeedView.clear_buffer()
+        cache.set('letters_to_show', [])
+        cache.set('shown_letters', [])
+        print("Game reset")
 
         score = cache.get(f'score_{player_name}', 0)
 
@@ -194,19 +199,6 @@ class ProcessVideoFrameView(View):
 
         return frame, np.array(current_landmarks)
 
-class ShownLettersView(View):
-    def get(self, request):
-        letters_to_show = cache.get('letters_to_show', [])
-        shown_letters = cache.get('shown_letters', [])
-        letters_to_show_string = ''.join(letters_to_show)
-        shown_letters_string = ''.join(shown_letters)
-        guessed_word = 'false'
-        if len(shown_letters) == len(letters_to_show):
-            guessed_word = 'true'
-
-        return JsonResponse({'letters_to_show': letters_to_show_string, 'shown_letters': shown_letters_string, 'guessed_word': guessed_word})
-
-
 class LiveCameraFeedView(View):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -219,6 +211,11 @@ class LiveCameraFeedView(View):
         self.word_to_signs()
         self.handedness = cache.get('handedness')
         self.label_dict = cache.get('labels')
+        self.camera = VideoCamera()
+
+    def __del__(self):
+        del self.camera
+        print("Camera released")
 
     # @staticmethod
     # def clear_buffer_static():
@@ -243,7 +240,7 @@ class LiveCameraFeedView(View):
             self.random_word = cache.get('random_word')
             self.word_to_signs()
             cache.set('letters_to_show', self.letters_to_show)
-        print(self.letters_to_show)
+        # print(self.letters_to_show)
 
     def word_to_signs(self):
         word = self.random_word
@@ -286,7 +283,7 @@ class LiveCameraFeedView(View):
             return JsonResponse({'status': 'Buffer cleared'})
 
         try:
-            return StreamingHttpResponse(self.generate_frames(VideoCamera()),
+            return StreamingHttpResponse(self.generate_frames(self.camera),
                                          content_type="multipart/x-mixed-replace; boundary=frame")
         except Exception as e:
             print("Error in LiveCameraFeedView.get:", e)
@@ -303,6 +300,7 @@ class LiveCameraFeedView(View):
                    b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n\r\n')
 
     def process_frame(self, frame):
+        self.get_cached_data()
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         results = mp_hands.process(frame_rgb)
         current_landmarks = []
@@ -328,7 +326,7 @@ class LiveCameraFeedView(View):
                     self.data_doubled.append(cur_landmarks)
                     self.data_doubled.append(cur_landmarks)
 
-        print(self.letters_to_show)
+        # print(self.letters_to_show)
         print(self.shown_letters)
 
         if len(self.data) >= 30 and len(self.shown_letters) < len(self.letters_to_show):
