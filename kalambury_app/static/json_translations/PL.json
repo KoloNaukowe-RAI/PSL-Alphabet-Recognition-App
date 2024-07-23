@@ -69,5 +69,8 @@
     "thanks-message":"Twoja opinia została przesłana, Dziękujemy za udział!",
     "thanks-back-home-button": "Wróć do Strony Głównej",
     "learn-the-signs": "Poznaj poszczególne znaki!",
-    "paragraph-mirror":"W polskim języku migowym znaki mogą być migane przy pomocy prawej lub lewej ręki. Przykłady zawarte na tej stronie pokazują znaki wykonane przy pomocy prawej ręki. Znaki migane lewą ręką są lustrzanym odbiciem znaków zaprezentowanych poniżej znaków."
+    "paragraph-mirror":"W polskim języku migowym znaki mogą być migane przy pomocy prawej lub lewej ręki. Przykłady zawarte na tej stronie pokazują znaki wykonane przy pomocy prawej ręki. Znaki migane lewą ręką są lustrzanym odbiciem znaków zaprezentowanych poniżej znaków.",
+    "player-name-display":"Gracz: ",
+    "recognized-letters":"Wykryte Znaki: ",
+    "score-display":"Wynik: "
 }

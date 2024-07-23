@@ -146,9 +146,9 @@ function startGame() {
                 startTimer(duration * 60);
                 stream_set = true;
             }
-
-            document.getElementById('player-name-display').textContent = `Player: ${playerName}`;
-            document.getElementById('score-display').textContent = `Score: ${data.score}`;
+                                     
+            document.getElementById('player_name_fill').textContent = playerName;
+            document.getElementById('score_fill').textContent = data.score;
             timer = duration * 60;
         })
         .catch(error => {
@@ -169,7 +169,7 @@ function resetGame() {
                 console.error('Random image element not found.');
             }
 
-            document.getElementById('score-display').textContent = `Score: ${data.score}`;
+            document.getElementById('score_fill').textContent = data.score;
         })
         .catch(error => {
             console.error('Error resetting game:', error);
@@ -196,15 +196,15 @@ function startTimer(duration) {
 }
 
 function updateRecognizedLetters() {
-    const lettersDisplay = document.getElementById('recognized-letters');
-    const scoreDisplay = document.getElementById('score-display');
+    const lettersDisplay = document.getElementById('letters_fill');
+    const scoreDisplay = document.getElementById('score_fill');
 
     function fetchRecognizedLetters() {
         fetch('/live-feed-letters/?update_letters=true')
             .then(response => response.json())
             .then(data => {
-                lettersDisplay.textContent = "Recognized Letters: " + data.shown_letters;
-                scoreDisplay.textContent = `Score: ${data.score}`;
+                lettersDisplay.textContent = data.shown_letters;
+                scoreDisplay.textContent = data.score;
             })
             .catch(error => console.error('Error fetching recognized letters:', error));
     }

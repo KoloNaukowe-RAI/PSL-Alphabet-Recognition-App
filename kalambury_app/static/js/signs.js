@@ -34,3 +34,4 @@ document.addEventListener('DOMContentLoaded', () => {
 if (sessionStorage.getItem('stream_set') === 'true') {
     sessionStorage.setItem('stream_set', false);
 }
+updateTheme();

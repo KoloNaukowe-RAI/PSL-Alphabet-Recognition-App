@@ -20,9 +20,8 @@ from io import BytesIO
 import base64
 
 mp_hands = mp.solutions.hands.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5)
-
-logger = logging.getLogger(__name__)
 camera = VideoCamera()
+logger = logging.getLogger(__name__)
 dataset = {
     "Zwierzęta": ["delfin", "dzik", "koń", "kot", "krowa", "małpa", "owca", "pies", "ptak", "ryba", "słoń", "zebra"],
     "Owoce": ["arbuz", "banan", "jabłko", "malina", "pomarańcza", "truskawka"],
@@ -155,7 +154,7 @@ class LiveCameraFeedView(View):
         self.word_to_signs()
         self.handedness = cache.get('handedness')
         self.label_dict = cache.get('labels')
-
+        #self.camera = VideoCamera()
     def __del__(self):
         del self.camera
         print("Camera released")

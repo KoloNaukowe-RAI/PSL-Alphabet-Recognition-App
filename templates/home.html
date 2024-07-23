@@ -59,12 +59,12 @@
         <div id="word-display" class="mt-3" style="font-size: 24px;"></div>
         <div class="image-container">
             <img id="word-image" src="" alt="Word Image" class="img-fluid" style="display: none;">
-            <img id="live-camera-feed" alt="Live Camera Feed" class="img-fluid live-camera-feed" style="display: none;">
+            <img id="live-camera-feed" src= "/live-camera-feed/" alt="Live Camera Feed" class="img-fluid live-camera-feed" style="display: none;">
         </div>
         <div class="timer" id="timer"></div>
-        <div class="player-name-display" id="player-name-display"></div>
-        <div id="recognized-letters" class="recognized-letters">Recognized Letters: </div> <!-- Added for displaying recognized letters -->
-        <div id="score-display" class="score-display">Score: 0</div> <!-- Added for displaying the score -->
+        <div class="player-name-display" id="player-name-display" ><span data-i18n="player-name-display"></span><b id="player_name_fill"></b></div>
+        <div id="recognized-letters" class="recognized-letters"><span data-i18n="recognized-letters"></span><b id="letters_fill"></b></div> <!-- Added for displaying recognized letters -->
+        <div id="score-display" class="score-display"><span data-i18n="score-display"></span><b id="score_fill"></b></div> <!-- Added for displaying the score -->
         <button class="btn custom-button" id="back-button" data-i18n="back-button"></button>
         <button class="btn custom-button" id="reset-button" data-i18n="reset-button"></button>
         <button class="btn custom-button" id="exit-button" data-i18n="exit-button"></button>

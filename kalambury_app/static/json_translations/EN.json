@@ -69,5 +69,8 @@
     "thanks-message":"Your feedback has been successfully submitted. We appreciate your input!",
     "thanks-back-home-button": "Go to Home",
     "learn-the-signs": "Learn the signs!",
-    "paragraph-mirror":"In Polish Sign Language, signs can be performed using either the right or left hand. The examples on this page show signs performed with the right hand. Signs performed with the left hand are mirror images of the signs presented below."
+    "paragraph-mirror":"In Polish Sign Language, signs can be performed using either the right or left hand. The examples on this page show signs performed with the right hand. Signs performed with the left hand are mirror images of the signs presented below.",
+    "player-name-display":"Player: ",
+    "recognized-letters":"Recognized Leters: ",
+    "score-display":"Score: "
 }
