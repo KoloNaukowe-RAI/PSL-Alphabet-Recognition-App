@@ -31,6 +31,12 @@ document.getElementById('theme-select').addEventListener('change', (event) => {
     updateTheme();
 });
 
+let stream_set = false;
+if (sessionStorage.getItem('stream_set') === null) {
+    sessionStorage.setItem('stream_set', false);
+}
+let timer;
+
 function updateTheme() {
     if (localStorage.getItem("theme") === 'light') {
         document.body.classList.add('light-mode');
@@ -129,26 +135,25 @@ function startGame() {
                 console.error('Random image element not found.');
             }
 
-            document.getElementById('live-camera-feed').style.display = 'block';
-            document.getElementById('live-camera-feed').src = "/live-camera-feed/";
+            if (sessionStorage.getItem('stream_set') === 'false') {
+                document.getElementById('live-camera-feed').style.display = 'block';
+                document.getElementById('live-camera-feed').src = "/live-camera-feed/";
+                sessionStorage.setItem('stream_set', true);
+            }
+
+            if (!stream_set) {
+                updateRecognizedLetters();
+                startTimer(duration * 60);
+                stream_set = true;
+            }
+
             document.getElementById('player-name-display').textContent = `Player: ${playerName}`;
             document.getElementById('score-display').textContent = `Score: ${data.score}`;
-            startTimer(duration * 60);
-            updateRecognizedLetters();
+            timer = duration * 60;
         })
         .catch(error => {
             console.error('Error starting game:', error);
         });
-
-        // Clear the buffer
-        fetch(`/live-camera-feed/?reset_buffer=true`)
-            .then(response => response.json())
-            .then(data => {
-                console.log('Buffer clear response:', data);
-            })
-            .catch(error => {
-                console.error('Error clearing buffer:', error);
-            });
 }
 
 function resetGame() {
@@ -174,20 +179,10 @@ function resetGame() {
         .catch(error => {
             console.error('Error resetting game:', error);
         });
-
-    // Clear the buffer
-    fetch(`/live-camera-feed/?reset_buffer=false`)
-        .then(response => response.json())
-        .then(data => {
-            console.log('Buffer clear response:', data);
-        })
-        .catch(error => {
-            console.error('Error clearing buffer:', error);
-        });
 }
 
 function startTimer(duration) {
-    let timer = duration;
+    timer = duration;
     const timerDisplay = document.getElementById('timer');
     const interval = setInterval(() => {
         const minutes = String(Math.floor(timer / 60)).padStart(2, '0');
