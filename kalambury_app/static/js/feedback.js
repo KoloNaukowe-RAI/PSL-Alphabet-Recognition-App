@@ -47,4 +47,8 @@ function updateTheme() {
         document.body.classList.remove('light-mode');
     }
 }
+
+if (sessionStorage.getItem('stream_set') === 'true') {
+    sessionStorage.setItem('stream_set', false);
+}
 updateTheme();
