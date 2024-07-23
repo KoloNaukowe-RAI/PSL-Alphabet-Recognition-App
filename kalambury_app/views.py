@@ -103,11 +103,6 @@ class ResetGameView(View):
         letters_to_show = cache.get('letters_to_show', [])
         if len(shown_letters) == len(letters_to_show) and len(shown_letters) > 0:
             guessed_word = 'true'
-            player_name = cache.get('player_name', 'Unknown')
-            score = cache.get(f'score_{player_name}', 0)
-            score += 10
-
-            cache.set(f'score_{player_name}', score)
 
         cache.set('letters_to_show', [])
         cache.set('shown_letters', [])
@@ -155,9 +150,6 @@ class LiveCameraFeedView(View):
         self.handedness = cache.get('handedness')
         self.label_dict = cache.get('labels')
         #self.camera = VideoCamera()
-    def __del__(self):
-        del self.camera
-        print("Camera released")
 
     def get_cached_data(self):
         self.letters_to_show = cache.get('letters_to_show', [])
@@ -234,7 +226,6 @@ class LiveCameraFeedView(View):
 
     def process_frame(self, frame):
         self.get_cached_data()
-        print(self.letters_to_show)
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         results = mp_hands.process(frame_rgb)
         current_landmarks = []
@@ -269,6 +260,8 @@ class LiveCameraFeedView(View):
                     player_name = cache.get('player_name', 'Unknown')
                     score = cache.get(f'score_{player_name}', 0)
                     score += 1  # 1 point for each correctly shown letter
+                    if len(self.shown_letters) == len(self.letters_to_show):
+                        score += 10 # 10 points for guessing the whole word
                     cache.set(f'score_{player_name}', score)
                     cache.set('shown_letters', self.shown_letters)
                     self.data_doubled = []
@@ -285,6 +278,8 @@ class LiveCameraFeedView(View):
                     player_name = cache.get('player_name', 'Unknown')
                     score = cache.get(f'score_{player_name}', 0)
                     score += 1  # 1 point for each correctly shown letter
+                    if len(self.shown_letters) == len(self.letters_to_show):
+                        score += 10 # 10 points for guessing the whole word
                     cache.set(f'score_{player_name}', score)
                     self.data_doubled = []
                     self.data = []
