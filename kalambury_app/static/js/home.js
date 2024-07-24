@@ -215,6 +215,8 @@ function updateRecognizedLetters() {
             .then(data => {
                 if (!(data.shown_letters.length == 0)) {
                     lettersDisplay.textContent = data.shown_letters.join('');
+                } else {
+                    lettersDisplay.textContent = '';
                 }
                 scoreDisplay.textContent = data.score;
             })
