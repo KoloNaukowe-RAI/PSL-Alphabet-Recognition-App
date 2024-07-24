@@ -70,6 +70,7 @@ document.getElementById('save-settings-button').addEventListener('click', () => 
         setTimeout(hideLoadingScreen, 2000);
         updateTheme();
         changeLanguage(language);
+        updateHandedness(hand);
     } else {
         alert('Please enter your name.');
     }
@@ -224,6 +225,15 @@ function updateRecognizedLetters() {
     }
 
     setInterval(fetchRecognizedLetters, 500);
+}
+
+function updateHandedness(hand) {
+    fetch('/handedness-update?hand=' + hand)
+        .then(response => response.json())
+        .then(data => {
+            console.log('Handedness updated:', data);
+        })
+        .catch(error => console.error('Error updating handedness:', error));
 }
 
 document.querySelectorAll('.star').forEach(star => {
