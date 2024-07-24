@@ -23,7 +23,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg d-flex flex-row justify-content-between .align-content-md-end">
         <div class="p-0">
-            <button class="openbtn" onclick="openNav()">&#9776; Menu</button>
+            <button class="openbtn" onclick="openNav()" id = "menu-open-button">&#9776; Menu</button>
         </div>
         <div class="p-2">
             <a class="navbar-brand" href="#" id="navbar-brand">Kalambury<i class="fas fa-american-sign-language-interpreting"></i></a>
@@ -111,6 +111,12 @@
                                 <option value="medium" data-i18n="diff-med"></option>
                                 <option value="hard" data-i18n="diff-hard"></option>
                             </select>
+                            <div class="form-group">
+                                <label for="hand-select" id="hand-label" data-i18n="hand-label"></label>
+                                <select class="form-control" id="hand-select">
+                                    <option value="left" data-i18n="hand-left"></option>
+                                    <option value="right" data-i18n="hand-right"></option>
+                                </select>
                         </div>
                         <div class="form-group">
                             <label for="theme-select" id="theme-label" data-i18n="theme-label"></label>

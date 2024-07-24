@@ -9,6 +9,11 @@ let theme = 'dark';
 if (localStorage.getItem("theme") === null) {
     localStorage.setItem("theme", theme);
 }
+let hand = 'right';
+if (localStorage.getItem("hand") === null) {
+    localStorage.setItem("hand", hand);
+}
+hand = localStorage.getItem("hand")
 theme = localStorage.getItem("theme")
 let difficulty = 'easy';
 if (localStorage.getItem("difficulty") === null) {
@@ -19,6 +24,7 @@ document.getElementById('player-name').value = playerName
 document.getElementById('language-select').value = language
 document.getElementById('difficulty-select').value = difficulty
 document.getElementById('theme-select').value = theme
+document.getElementById('hand-select').value = hand
 
 document.getElementById('language-select').addEventListener('change', (event) => {
     language = event.target.value;
@@ -49,6 +55,7 @@ document.getElementById('save-settings-button').addEventListener('click', () => 
     playerName = document.getElementById('player-name').value;
     difficulty = document.getElementById('difficulty-select').value;
     theme = document.getElementById('theme-select').value;
+    hand = document.getElementById('hand-select').value;
     if (playerName.length > 15) {
         alert('Player name must be 15 characters or less.');
         return;
@@ -57,6 +64,7 @@ document.getElementById('save-settings-button').addEventListener('click', () => 
         localStorage.setItem('playerName', playerName);
         localStorage.setItem('difficulty', difficulty);
         localStorage.setItem('theme', theme);
+        localStorage.setItem('hand', hand);
         $('#settingsModal').modal('hide');
         showLoadingScreen();
         setTimeout(hideLoadingScreen, 2000);
@@ -108,6 +116,7 @@ document.getElementById('add-player-button').addEventListener('click', () => {
 });
 
 document.getElementById('back-button').addEventListener('click', () => {
+    document.getElementById('menu-open-button').display = 'block'
     document.getElementById('game-section').classList.add('hidden');
     document.getElementById('main-menu').classList.remove('hidden');
 });
@@ -124,7 +133,8 @@ document.getElementById('tutorial-button').addEventListener('click', () => {
 
 function startGame() {
     const duration = document.getElementById('duration').value;
-    fetch(`/start-game?player_name=${playerName}&language=${language}&difficulty=${difficulty}`)
+    document.getElementById('menu-open-button').display = 'none'
+    fetch(`/start-game?player_name=${playerName}&language=${language}&difficulty=${difficulty}&hand=${hand}`)
         .then(response => response.json())
         .then(data => {
             const randomImage = document.getElementById('word-image');

@@ -72,5 +72,8 @@
     "paragraph-mirror":"W polskim języku migowym znaki mogą być migane przy pomocy prawej lub lewej ręki. Przykłady zawarte na tej stronie pokazują znaki wykonane przy pomocy prawej ręki. Znaki migane lewą ręką są lustrzanym odbiciem znaków zaprezentowanych poniżej znaków.",
     "player-name-display":"Gracz: ",
     "recognized-letters":"Wykryte Znaki: ",
-    "score-display":"Wynik: "
+    "score-display":"Wynik: ",
+    "hand-left":"Lewa",
+    "hand-right":"Prawa",
+    "hand-label":"Wybór Ręki"
 }

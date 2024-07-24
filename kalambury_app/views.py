@@ -44,6 +44,7 @@ class StartGameView(View):
     def get(self, request):
         player_name = cache.get('player_name', 'Unknown')
         difficulty = request.GET.get('difficulty', 'easy')
+        handedness = request.GET.get('hand', 'Left')
         category, word, image_url = self.select_random_category_word_and_image(difficulty)
         cache.set('random_word', word)
 
@@ -56,6 +57,10 @@ class StartGameView(View):
         cache.set(f'score_{player_name}', 0)
         cache.set('letters_to_show', [])
         cache.set('shown_letters', [])
+        if handedness == 'left':
+            cache.set('handedness', "Right")
+        else:
+            cache.set('handedness', "Left")
         print("Game reset")
 
         return JsonResponse({'category': category, 'word': word, 'image_url': image_url, 'score': 0})
@@ -167,6 +172,7 @@ class LiveCameraFeedView(View):
             self.data_doubled.append(val)
             self.data_doubled.append(val)
         self.handedness = cache.get('handedness')
+        print(self.handedness)
         if not self.letters_to_show:
             self.data = []
             self.data_doubled = []
@@ -235,15 +241,18 @@ class LiveCameraFeedView(View):
     def process_frame(self, frame):
         self.get_cached_data()
         #print(self.letters_to_show)
+        #print(self.handedness)
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         results = mp_hands.process(frame_rgb)
         current_landmarks = []
-        print(results.multi_hand_landmarks)
+        #print(results.multi_hand_landmarks)
         if results.multi_hand_landmarks:
             for hand_landmarks, handedness in zip(results.multi_hand_landmarks, results.multi_handedness):
                 # Check if the hand matches the selected handedness
                 #print(self.handedness)
                 #print("in multi")
+                #print(handedness.classification[0].label)
+
                 if handedness.classification[0].label == self.handedness:
                     mp.solutions.drawing_utils.draw_landmarks(
                         frame,
