@@ -203,7 +203,9 @@ function updateRecognizedLetters() {
         fetch('/live-feed-letters/?update_letters=true')
             .then(response => response.json())
             .then(data => {
-                lettersDisplay.textContent = data.shown_letters;
+                if (!(data.shown_letters.length == 0)) {
+                    lettersDisplay.textContent = data.shown_letters.join('');
+                }
                 scoreDisplay.textContent = data.score;
             })
             .catch(error => console.error('Error fetching recognized letters:', error));

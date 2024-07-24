@@ -234,13 +234,16 @@ class LiveCameraFeedView(View):
 
     def process_frame(self, frame):
         self.get_cached_data()
-        print(self.letters_to_show)
+        #print(self.letters_to_show)
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         results = mp_hands.process(frame_rgb)
         current_landmarks = []
+        print(results.multi_hand_landmarks)
         if results.multi_hand_landmarks:
             for hand_landmarks, handedness in zip(results.multi_hand_landmarks, results.multi_handedness):
                 # Check if the hand matches the selected handedness
+                #print(self.handedness)
+                #print("in multi")
                 if handedness.classification[0].label == self.handedness:
                     mp.solutions.drawing_utils.draw_landmarks(
                         frame,
