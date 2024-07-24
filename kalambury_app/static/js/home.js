@@ -211,7 +211,7 @@ function updateRecognizedLetters() {
             .catch(error => console.error('Error fetching recognized letters:', error));
     }
 
-    setInterval(fetchRecognizedLetters, 1000);
+    setInterval(fetchRecognizedLetters, 500);
 }
 
 document.querySelectorAll('.star').forEach(star => {
