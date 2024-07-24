@@ -23,9 +23,9 @@ mp_hands = mp.solutions.hands.Hands(min_detection_confidence=0.5, min_tracking_c
 camera = VideoCamera()
 logger = logging.getLogger(__name__)
 dataset = {
-    "Zwierzęta": ["delfin", "dzik", "koń", "kot", "krowa", "małpa", "owca", "pies", "ptak", "ryba", "słoń", "zebra"],
-    "Owoce": ["arbuz", "banan", "jabłko", "malina", "pomarańcza", "truskawka"],
-    "Warzywa": ["burak", "cebula", "dynia", "sałata", "seler"],
+    "Zwierzęta": ["antylopa", "delfin", "dzik", "flaming", "koń", "kot", "krokodyl", "krowa", "leniwiec", "małpa", "niedźwiedź", "owca", "panda", "pies", "pingwin", "ptak", "ryba", "słoń", "szynszyl", "zebra"],
+    "Owoce": ["ananas", "arbuz", "banan", "brzoskwinia", "cytryna", "jabłko", "kokos", "limonka", "malina", "pomarańcza", "śliwka", "truskawka", "winogrono"],
+    "Warzywa": ["burak", "cebula", "cukinia", "dynia", "kalafior", "ogórek", "papryka", "pomidor", "sałata", "seler"],
     "Zawody": ["fryzjer", "kelner", "lekarz"]
 }
 
