@@ -285,6 +285,14 @@ class LiveCameraFeedView(View):
 
         return frame
 
+class HandednessUpdateView(View):
+    def get(self, request):
+        handedness = request.GET.get('hand', 'Left')
+        if handedness == 'left':
+            cache.set('handedness', "Right")
+        else:
+            cache.set('handedness', "Left")
+        return JsonResponse({'handedness': handedness})
 
 class LiveFeedLettersView(View):
     def get(self, request):
