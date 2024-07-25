@@ -3,6 +3,8 @@ An application to support learning the Polish Sign Language
 
 **Opis w języku polskim znajduje się [poniżej](#aplikacja-do-rozpoznawania-alfabetu-polskiego-języka-migowego).**
 
+[Watch the video about the application](https://youtu.be/0AlX_skFt_s)
+
 ## 1. Running the application
 
 ### 1.1. Before the first launch
@@ -91,6 +93,8 @@ The images used in the game were generated with Canva's AI tools and are used in
 # Aplikacja do rozpoznawania alfabetu Polskiego Języka Migowego
 
 Aplikacja wspomagająca naukę Polskiego Języka Migowego.
+
+[Obejrzyj film o aplikacji](https://youtu.be/0AlX_skFt_s)
 
 ## 5. Licencja
 
