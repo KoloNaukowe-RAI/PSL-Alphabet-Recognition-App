@@ -5,6 +5,8 @@ An application to support the process of learning the Polish Sign Language
 
 [Watch the video about the application](https://youtu.be/0AlX_skFt_s)
 
+[Website of the project](https://kolonaukowe-rai.github.io/PSL-Alphabet-Recognition-App/)
+
 ## 1. Running the application
 
 ### 1.1. Before the first launch
@@ -117,6 +119,9 @@ The images used in the game were generated with Canva's AI tools and are used in
 Aplikacja wspomagająca naukę Polskiego Języka Migowego.
 
 [Obejrzyj film o aplikacji](https://youtu.be/0AlX_skFt_s)
+
+[Strona internetowa projektu](https://kolonaukowe-rai.github.io/PSL-Alphabet-Recognition-App/)
+
 
 ## 1. Uruchomienie aplikacji
 

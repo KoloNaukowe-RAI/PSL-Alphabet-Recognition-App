@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Index.md",
+                "file": "files/Technologies.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Index.md",
+                "file": "files/Running the application.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Index.md",
+                "file": "files/Running the application.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Index.md"
+                "file": "files/Running the application.md"
               }
             }
           }
@@ -147,22 +147,59 @@
       "webpage-html-export:Export Vault to HTML": false
     }
   },
-  "active": "8ca29807ab9723dd",
+  "floating": {
+    "id": "c9540bf79ff0f95f",
+    "type": "floating",
+    "children": [
+      {
+        "id": "cf0cc40e552c57a8",
+        "type": "window",
+        "children": [
+          {
+            "id": "cf3d07431b467e85",
+            "type": "tabs",
+            "children": [
+              {
+                "id": "ca88a18b850ce00b",
+                "type": "leaf",
+                "state": {
+                  "type": "markdown",
+                  "state": {
+                    "file": "files/Running the application.md",
+                    "mode": "source",
+                    "source": false
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "direction": "vertical",
+        "x": 510,
+        "y": 540,
+        "width": 900,
+        "height": 500,
+        "maximize": false,
+        "zoom": 0
+      }
+    ]
+  },
+  "active": "ca88a18b850ce00b",
   "lastOpenFiles": [
+    "files/Authors.md",
+    "files/Application description.md",
     "files/Technologies.md",
     "files/Summary.md",
     "files/Running the application.md",
-    "files/Authors.md",
-    "files/Application description.md",
-    "Index.md",
+    "files/nn_model.png",
+    "files/game.png",
+    "files/data_examples.png",
     "files/cropped-Logo_PP.png",
+    "Index.md",
     "files/tutorials.png",
     "files/training.png",
     "files/settings.png",
-    "files/data_examples.png",
     "files/technologies.png",
-    "files/nn_model.png",
-    "files/game.png",
     "Untitled.md",
     "files"
   ]
