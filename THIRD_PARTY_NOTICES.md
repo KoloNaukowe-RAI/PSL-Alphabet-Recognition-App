@@ -24,6 +24,17 @@ The website in `docs/` was generated from the notes in `docs/PSL-Alphabet-Recogn
 | Component | Files | Copyright | License |
 |---|---|---|---|
 | Webpage HTML Export (plugin) | `docs/PSL-Alphabet-Recognition-App/.obsidian/plugins/webpage-html-export/` | Copyright (c) 2023 Nathan George | MIT |
+| Webpage HTML Export (website scripts) | `docs/lib/scripts/webpage.js`, `docs/lib/scripts/graph-*` | Copyright (c) 2023 Nathan George | MIT |
+| PixiJS 7.2.4 | `docs/lib/scripts/pixi.js` | Copyright (c) Mathew Groves, Chad Engler | MIT |
+| MiniSearch | `docs/lib/scripts/minisearch.js` | Copyright (c) Luca Ongaro | MIT |
+| w3color | `docs/lib/scripts/tinycolor.js` | W3Schools | bundled by Webpage HTML Export |
+| Obsidian default theme | `docs/lib/styles/obsidian.css` | Copyright (c) Dynalist Inc. | bundled by Webpage HTML Export |
+| Inter | `docs/lib/fonts/*.woff2` (Inter) | Copyright (c) The Inter Project Authors | SIL OFL 1.1 |
+| Flow Circular | `docs/lib/fonts/4bb6ac751d1c5478ff3a.woff2` | Copyright (c) Dan Ross | SIL OFL 1.1 |
+| Source Code Pro | `docs/lib/fonts/*.ttf` (Source Code Pro) | Copyright (c) Adobe | SIL OFL 1.1 |
+| Lato | `docs/lib/fonts/3b9b99039cc0a98dd50c.ttf` | Copyright (c) 2011-2015 tyPoland Lukasz Dziedzic | SIL OFL 1.1 |
+
+The full copyright notices of the fonts are embedded in the font files. The text of the SIL Open Font License 1.1 is available at <https://openfontlicense.org/open-font-license-official-text/>.
 
 The MIT-licensed components listed above are distributed under the following terms:
 
