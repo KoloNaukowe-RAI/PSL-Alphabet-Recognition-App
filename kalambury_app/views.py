@@ -18,6 +18,7 @@ from .camera import VideoCamera
 import qrcode
 from io import BytesIO
 import base64
+import time
 
 mp_hands = mp.solutions.hands.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5)
 camera = VideoCamera()
@@ -134,6 +135,44 @@ class ResetGameView(View):
         image_path = os.path.join(settings.STATIC_URL, 'images_to_display', f'{word}.png')
         return image_path
 
+# Kalman Filter
+class CV_KF:
+    def __init__(self, n_points):
+        self.n_points_ = n_points
+        self.kfs = [self.init_kalman() for _ in range(n_points)]
+
+    def init_kalman(self):
+        kf = cv2.KalmanFilter(6, 3)
+        kf.transitionMatrix = np.eye(6, dtype=np.float32)
+        kf.measurementMatrix = np.zeros((3, 6), np.float32)
+        kf.processNoiseCov = np.eye(6, dtype=np.float32) * 1e-4
+
+        kf.measurementMatrix[0, 0] = 1
+        kf.measurementMatrix[1, 1] = 1
+        kf.measurementMatrix[2, 2] = 1
+        kf.transitionMatrix[0, 3] = 1
+        kf.transitionMatrix[1, 4] = 1
+        kf.transitionMatrix[2, 5] = 1
+
+        return kf
+
+    def update_dt(self, dt):
+        for kf in self.kfs:
+            kf.transitionMatrix[0, 3] = dt * 1000
+            kf.transitionMatrix[1, 4] = dt * 1000
+            kf.transitionMatrix[2, 5] = dt * 1000
+
+    def predict(self, points):
+        preds = []
+        for i, point in enumerate(points):
+            if i >= self.n_points_:
+                break
+            input_point = np.float32(point)
+            self.kfs[i].correct(input_point)
+            prediction = self.kfs[i].predict()
+            preds.append(prediction[:3].flatten())
+        return preds
+
 class LiveCameraFeedView(View):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -146,6 +185,8 @@ class LiveCameraFeedView(View):
         self.word_to_signs()
         self.handedness = cache.get('handedness')
         self.label_dict = cache.get('labels')
+        self.kf = CV_KF(21)
+        self.prev_time = time.time()
 
     def __del__(self):
         del self.camera
@@ -244,7 +285,15 @@ class LiveCameraFeedView(View):
                         if self.handedness == 'Right':
                             x = -1 * (x - 1)
                         current_landmarks.append(np.array([x, hand_landmark.y, hand_landmark.z]))
-                    cur_landmarks = np.array(current_landmarks)[0:21, :].reshape(3 * 21)
+
+                    # Stabilize the points using Kalman Filter
+                    current_time = time.time()
+                    dt = current_time - self.prev_time
+                    self.prev_time = current_time
+                    self.kf.update_dt(dt)
+                    stabilized_landmarks = self.kf.predict(current_landmarks)
+
+                    cur_landmarks = np.array(stabilized_landmarks)[0:21, :].reshape(3 * 21)
                     self.data.append(cur_landmarks)
                     self.data_doubled.append(cur_landmarks)
                     self.data_doubled.append(cur_landmarks)
